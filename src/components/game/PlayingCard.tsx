@@ -6,7 +6,8 @@ import { cn } from '@/utils'
 
 export interface PlayingCardProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
   card: Card
-  faceUp?: boolean
+  isRevealed?: boolean
+  onReveal?: () => void
   size?: 'sm' | 'md' | 'lg'
   isHighlighted?: boolean
   onFlipComplete?: () => void
@@ -20,49 +21,46 @@ const suitColorMap: Record<Suit, { text: string; glow: string; glowClass: string
 }
 
 const sizeStyles = {
-  sm: { container: 'w-20 h-28', rank: 'text-lg', symbol: 'text-3xl', corner: 'text-xs' },
-  md: { container: 'w-28 h-40', rank: 'text-2xl', symbol: 'text-5xl', corner: 'text-sm' },
-  lg: { container: 'w-36 h-52', rank: 'text-4xl', symbol: 'text-7xl', corner: 'text-base' },
+  sm: { container: 'w-20 h-28', rank: 'text-lg', symbol: 'text-3xl', corner: 'text-xs', logo: 'w-8 h-8 text-sm' },
+  md: { container: 'w-28 h-40', rank: 'text-2xl', symbol: 'text-5xl', corner: 'text-sm', logo: 'w-10 h-10 text-base' },
+  lg: { container: 'w-36 h-52', rank: 'text-4xl', symbol: 'text-7xl', corner: 'text-base', logo: 'w-14 h-14 text-xl' },
 }
 
-const cardVariants = {
-  hidden: {
-    rotateY: 180,
-    opacity: 0,
-  },
-  visible: {
-    rotateY: 0,
-    opacity: 1,
-    transition: {
-      rotateY: { duration: 0.6, ease: [0.4, 0, 0.2, 1] as const },
-      opacity: { duration: 0.3 },
-    },
-  },
-  exit: {
-    rotateY: -180,
-    opacity: 0,
-    transition: { duration: 0.4 },
-  },
+const flipTransition = {
+  duration: 0.6,
+  ease: [0.4, 0, 0.2, 1] as const,
 }
 
 export const PlayingCard = forwardRef<HTMLDivElement, PlayingCardProps>(
-  ({ card, faceUp = true, size = 'md', isHighlighted, onFlipComplete, className, ...props }, ref) => {
+  ({ card, isRevealed = true, onReveal, size = 'md', isHighlighted, onFlipComplete, className, ...props }, ref) => {
     const { suit, rank } = card
     const symbol = SUIT_SYMBOLS[suit]
     const colors = suitColorMap[suit]
     const sizeStyle = sizeStyles[size]
 
+    const handleClick = () => {
+      if (!isRevealed && onReveal) {
+        onReveal()
+      }
+    }
+
     return (
       <motion.div
         ref={ref}
-        className={cn('perspective-1000', sizeStyle.container, className)}
+        className={cn(
+          'perspective-1000 cursor-pointer select-none',
+          sizeStyle.container,
+          className
+        )}
+        onClick={handleClick}
+        whileTap={!isRevealed ? { scale: 0.98 } : undefined}
         {...props}
       >
+        {/* Card Inner - handles the 3D rotation */}
         <motion.div
           className="w-full h-full relative preserve-3d"
-          initial="hidden"
-          animate={faceUp ? 'visible' : 'hidden'}
-          variants={cardVariants}
+          animate={{ rotateY: isRevealed ? 0 : 180 }}
+          transition={flipTransition}
           onAnimationComplete={onFlipComplete}
         >
           {/* Front Face */}
@@ -99,28 +97,49 @@ export const PlayingCard = forwardRef<HTMLDivElement, PlayingCardProps>(
             </div>
           </div>
 
-          {/* Back Face */}
+          {/* Back Face - Obsidian & Gold Design */}
           <div
             className={cn(
               'absolute inset-0 backface-hidden rounded-xl rotate-y-180',
-              'bg-surface border-2 border-neon-purple/50',
+              'card-back-obsidian',
+              'border-2 border-gold glow-gold',
               'overflow-hidden'
             )}
           >
-            {/* Pattern Background */}
-            <div className="absolute inset-2 rounded-lg card-back-pattern opacity-60" />
+            {/* Gold Geometric Pattern Overlay */}
+            <div className="absolute inset-0 obsidian-pattern" />
 
-            {/* Center Logo */}
+            {/* Inner Border Frame */}
+            <div className="absolute inset-2 rounded-lg border border-gold/30" />
+
+            {/* Corner Accents */}
+            <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-gold/60" />
+            <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-gold/60" />
+            <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-gold/60" />
+            <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-gold/60" />
+
+            {/* Center Logo - "B" in Gold Circle */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-12 h-12 rounded-full border-2 border-neon-purple flex items-center justify-center">
-                <span className="text-neon-purple text-xl font-bold">B</span>
+              <div
+                className={cn(
+                  'rounded-full border-2 border-gold',
+                  'flex items-center justify-center',
+                  'bg-black/50 backdrop-blur-sm',
+                  'glow-gold',
+                  sizeStyle.logo
+                )}
+              >
+                <span className="text-gold font-bold text-glow-gold">B</span>
               </div>
             </div>
 
-            {/* Scanline Effect */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              <div className="w-full h-1 bg-gradient-to-b from-transparent via-neon-green/20 to-transparent animate-scanline" />
-            </div>
+            {/* Subtle Shine Effect */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'linear-gradient(135deg, rgba(212,175,55,0.08) 0%, transparent 50%, transparent 100%)',
+              }}
+            />
           </div>
         </motion.div>
       </motion.div>

@@ -14,6 +14,8 @@ export default {
         'neon-green-dim': '#39ff1440',
         'neon-purple-dim': '#bc13fe40',
         'neon-red-dim': '#ff073a40',
+        gold: '#d4af37',
+        'gold-dim': '#d4af3740',
         surface: '#121212',
         'surface-elevated': '#1a1a1a',
         'text-primary': '#ffffff',

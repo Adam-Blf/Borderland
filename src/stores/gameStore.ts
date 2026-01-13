@@ -43,6 +43,7 @@ const initialGameState: GameState = {
   players: [],
   currentPlayerIndex: 0,
   currentCard: null,
+  isCardRevealed: false,
   contestState: initialContestState,
   gamePhase: 'setup',
 }
@@ -158,6 +159,7 @@ interface GameStore extends GameState {
 
   // Turn Management
   drawCard: () => Card | null
+  revealCard: () => void
   nextTurn: () => void
 
   // Contest System
@@ -207,6 +209,7 @@ export const useGameStore = create<GameStore>()(
           players,
           currentPlayerIndex: 0,
           currentCard: null,
+          isCardRevealed: false,
           contestState: initialContestState,
           gamePhase: 'playing',
         })
@@ -263,9 +266,14 @@ export const useGameStore = create<GameStore>()(
         set({
           deck: remainingDeck,
           currentCard: drawnCard,
+          isCardRevealed: false,
         })
 
         return drawnCard
+      },
+
+      revealCard: () => {
+        set({ isCardRevealed: true })
       },
 
       nextTurn: () => {
@@ -281,6 +289,7 @@ export const useGameStore = create<GameStore>()(
           set({
             ...discardUpdate,
             currentCard: null,
+            isCardRevealed: false,
             contestState: initialContestState,
             gamePhase: 'ended',
           })
@@ -293,6 +302,7 @@ export const useGameStore = create<GameStore>()(
           ...discardUpdate,
           currentPlayerIndex: nextIndex,
           currentCard: null,
+          isCardRevealed: false,
           contestState: initialContestState,
           gamePhase: 'playing',
         })

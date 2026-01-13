@@ -1,5 +1,6 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Home } from 'lucide-react'
 import { useGameStore } from '@/stores'
 import { SUIT_RULES } from '@/types'
 import type { Player, GamePhase } from '@/types'
@@ -11,6 +12,7 @@ import { calculatePenalty } from '@/stores/gameStore'
 
 export interface GameBoardProps {
   className?: string
+  onQuit?: () => void
 }
 
 const containerVariants = {
@@ -138,7 +140,7 @@ function ActionButtons({ onDrawCard, onStartContest, onNextTurn, gamePhase, hasC
   return null
 }
 
-export function GameBoard({ className }: GameBoardProps) {
+export function GameBoard({ className, onQuit }: GameBoardProps) {
   const {
     currentCard,
     gamePhase,
@@ -158,6 +160,20 @@ export function GameBoard({ className }: GameBoardProps) {
   const totalCards = 52
 
   const [showContestModal, setShowContestModal] = useState(false)
+  const [cardRevealed, setCardRevealed] = useState(false)
+
+  // Reset reveal state when a new card is drawn
+  useEffect(() => {
+    if (currentCard) {
+      setCardRevealed(false)
+    }
+  }, [currentCard?.id])
+
+  const handleRevealCard = useCallback(() => {
+    if (!cardRevealed) {
+      setCardRevealed(true)
+    }
+  }, [cardRevealed])
 
   const currentRule = currentCard ? SUIT_RULES[currentCard.suit] : null
 
@@ -212,6 +228,22 @@ export function GameBoard({ className }: GameBoardProps) {
       initial="hidden"
       animate="visible"
     >
+      {/* Home Button - Top Left */}
+      {onQuit && (
+        <button
+          onClick={onQuit}
+          className={cn(
+            'fixed top-4 left-4 z-40',
+            'p-3 rounded-full',
+            'bg-surface-elevated border border-text-muted/30',
+            'text-text-muted hover:text-neon-green',
+            'transition-colors'
+          )}
+        >
+          <Home className="w-5 h-5" />
+        </button>
+      )}
+
       {/* Status Zone - Top */}
       <header className="flex-shrink-0 mb-6">
         <StatusBar
@@ -232,14 +264,35 @@ export function GameBoard({ className }: GameBoardProps) {
               animate="visible"
               exit="exit"
             >
-              <PlayingCard card={currentCard} size="lg" isHighlighted />
+              <PlayingCard
+                card={currentCard}
+                size="lg"
+                isRevealed={cardRevealed}
+                onReveal={handleRevealCard}
+                isHighlighted={cardRevealed}
+              />
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Rule Display */}
+        {/* Tap to Reveal Indicator */}
         <AnimatePresence>
-          {currentRule && (
+          {currentCard && !cardRevealed && (
+            <motion.p
+              key="reveal-hint"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="text-gold text-sm mt-4 animate-pulse text-glow-gold"
+            >
+              Tap to Reveal
+            </motion.p>
+          )}
+        </AnimatePresence>
+
+        {/* Rule Display - Only show when card is revealed */}
+        <AnimatePresence>
+          {currentRule && cardRevealed && (
             <motion.div
               key="rule"
               variants={ruleVariants}

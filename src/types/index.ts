@@ -5,6 +5,9 @@ export interface BaseProps {
 
 export type NeonColor = 'green' | 'purple' | 'red'
 
+/** App-level navigation screens (separate from game phases) */
+export type AppScreen = 'hub' | 'game' | 'rules'
+
 export interface ThemeColors {
   blackout: string
   neonGreen: string
@@ -99,20 +102,20 @@ export interface SuitRule {
 
 export const SUIT_RULES: Record<Suit, SuitRule> = {
   clubs: {
-    title: 'Guess',
-    description: 'Devine si la prochaine carte est plus haute ou plus basse',
+    title: 'Le Guess',
+    description: 'La carte est FACE CACHÉE. Demande à un joueur de deviner sa valeur exacte (ex: Roi). Clique pour révéler. S\'il a juste, tu distribues. Sinon, il boit.',
   },
   diamonds: {
-    title: 'Action',
-    description: 'Fais une action (le groupe decide)',
+    title: 'L\'Action',
+    description: 'Donne une action au joueur de ton choix.',
   },
   hearts: {
-    title: 'Question',
-    description: 'Reponds a une question embarrassante',
+    title: 'La Question',
+    description: 'Pose une question au joueur de ton choix.',
   },
   spades: {
-    title: 'Contrainte',
-    description: 'Accomplis une contrainte decidee par le groupe',
+    title: 'La Contrainte',
+    description: 'Donne une contrainte à accomplir au joueur de ton choix.',
   },
 } as const
 
@@ -128,6 +131,8 @@ export interface GameState {
   currentPlayerIndex: number
   /** Currently drawn card */
   currentCard: Card | null
+  /** Whether the current card is revealed (face up) */
+  isCardRevealed: boolean
   /** Contest/duel state */
   contestState: ContestState
   /** Current phase of the game */

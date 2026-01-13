@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Users, Play, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui'
 import { GameBoard } from '@/components/game'
+import { HubScreen, RulesScreen } from '@/components/screens'
 import { useGameStore, useAppStore } from '@/stores'
 import { cn } from '@/utils'
 
@@ -143,8 +144,16 @@ function SetupScreen({ onStart }: { onStart: (names: string[]) => void }) {
   )
 }
 
+// Screen transition variants
+const screenVariants = {
+  initial: { opacity: 0, x: 50 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: -50 },
+}
+
 function App() {
   const { gamePhase, initGame, resetGame } = useGameStore()
+  const { currentScreen, goToHub } = useAppStore()
 
   const handleStart = (names: string[]) => {
     initGame(names)
@@ -154,35 +163,81 @@ function App() {
     resetGame()
   }
 
+  const handleQuitToHub = () => {
+    resetGame()
+    goToHub()
+  }
+
+  // Render the appropriate screen based on navigation state
+  const renderScreen = () => {
+    switch (currentScreen) {
+      case 'hub':
+        return (
+          <motion.div
+            key="hub"
+            variants={screenVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ type: 'spring', damping: 25 }}
+          >
+            <HubScreen />
+          </motion.div>
+        )
+
+      case 'rules':
+        return (
+          <motion.div
+            key="rules"
+            variants={screenVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ type: 'spring', damping: 25 }}
+          >
+            <RulesScreen />
+          </motion.div>
+        )
+
+      case 'game':
+        // Game screen handles its own internal navigation (setup/playing)
+        return (
+          <AnimatePresence mode="wait">
+            {gamePhase === 'setup' ? (
+              <SetupScreen key="setup" onStart={handleStart} />
+            ) : (
+              <motion.div
+                key="game"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <GameBoard onQuit={handleQuitToHub} />
+
+                {/* Reset Button */}
+                <button
+                  onClick={handleReset}
+                  className={cn(
+                    'fixed top-4 right-4 z-40',
+                    'p-3 rounded-full',
+                    'bg-surface-elevated border border-text-muted/30',
+                    'text-text-muted hover:text-neon-red',
+                    'transition-colors'
+                  )}
+                >
+                  <RotateCcw className="w-5 h-5" />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )
+    }
+  }
+
   return (
     <div className="relative">
       <AnimatePresence mode="wait">
-        {gamePhase === 'setup' ? (
-          <SetupScreen key="setup" onStart={handleStart} />
-        ) : (
-          <motion.div
-            key="game"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <GameBoard />
-
-            {/* Reset Button */}
-            <button
-              onClick={handleReset}
-              className={cn(
-                'fixed top-4 right-4 z-40',
-                'p-3 rounded-full',
-                'bg-surface-elevated border border-text-muted/30',
-                'text-text-muted hover:text-neon-red',
-                'transition-colors'
-              )}
-            >
-              <RotateCcw className="w-5 h-5" />
-            </button>
-          </motion.div>
-        )}
+        {renderScreen()}
       </AnimatePresence>
     </div>
   )
