@@ -149,10 +149,15 @@ export function getNextPlayerIndex(
 
 interface GameStore extends GameState {
   // Game Setup
-  initGame: (playerNames: string[]) => void
+  initGame: (playerNames?: string[]) => void
   resetGame: () => void
 
-  // Player Management
+  // Player Management (Welcome Screen)
+  setPlayers: (names: string[]) => void
+  clearPlayers: () => void
+  hasPlayers: () => boolean
+
+  // Player Management (In-Game)
   addPlayer: (name: string) => void
   removePlayer: (playerId: string) => void
   deactivatePlayer: (playerId: string) => void
@@ -191,15 +196,23 @@ export const useGameStore = create<GameStore>()(
       // Game Setup Actions
       // ========================================
 
-      initGame: (playerNames: string[]) => {
-        if (playerNames.length < 2) {
+      initGame: (playerNames?: string[]) => {
+        const existingPlayers = get().players
+
+        let players: Player[]
+
+        if (playerNames && playerNames.length >= 2) {
+          // Legacy mode: names provided directly
+          players = playerNames
+            .filter(name => name.trim().length > 0)
+            .map(createPlayer)
+        } else if (existingPlayers.length >= 2) {
+          // New mode: reuse existing players, reactivate all
+          players = existingPlayers.map(p => ({ ...p, active: true }))
+        } else {
           console.warn('At least 2 players required')
           return
         }
-
-        const players = playerNames
-          .filter(name => name.trim().length > 0)
-          .map(createPlayer)
 
         const deck = shuffleDeck(createDeck())
 
@@ -216,7 +229,39 @@ export const useGameStore = create<GameStore>()(
       },
 
       resetGame: () => {
-        set(initialGameState)
+        // Reset game state but preserve players
+        const { players } = get()
+        set({
+          ...initialGameState,
+          players, // Keep existing players
+        })
+      },
+
+      // ========================================
+      // Player Management (Welcome Screen)
+      // ========================================
+
+      setPlayers: (names: string[]) => {
+        const sanitizedNames = names
+          .map(n => n.trim().slice(0, 20).replace(/[<>]/g, ''))
+          .filter(n => n.length > 0)
+
+        if (sanitizedNames.length < 2) {
+          console.warn('At least 2 players required')
+          return
+        }
+
+        const players = sanitizedNames.map(createPlayer)
+        set({ players })
+      },
+
+      clearPlayers: () => {
+        set({ players: [] })
+      },
+
+      hasPlayers: () => {
+        const { players } = get()
+        return players.length >= 2
       },
 
       // ========================================

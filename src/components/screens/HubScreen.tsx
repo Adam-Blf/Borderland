@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
-import { Play, Book, Sparkles } from 'lucide-react'
+import { Play, Book, Sparkles, Users } from 'lucide-react'
 import { Button } from '@/components/ui'
-import { useAppStore } from '@/stores'
+import { useAppStore, useGameStore } from '@/stores'
 import { cn } from '@/utils'
 
 interface GameCardProps {
@@ -17,42 +17,47 @@ function GameCard({ title, subtitle, description, onPlay, onRules }: GameCardPro
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.3, type: 'spring', damping: 20 }}
+      transition={{ delay: 0.3, type: 'spring', damping: 25, stiffness: 200 }}
       whileHover={{ scale: 1.02, y: -4 }}
       className={cn(
         'relative overflow-hidden rounded-2xl',
-        'bg-surface border border-text-muted/20',
+        'bg-obsidian-light border border-gold/40',
         'p-6 sm:p-8',
         'transition-shadow duration-300',
-        'hover:shadow-[0_0_40px_rgba(57,255,20,0.15)]'
+        'hover:shadow-[0_0_40px_rgba(212,175,55,0.15)]',
+        'hover:border-gold/60'
       )}
     >
-      {/* Decorative gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-neon-green/5 via-transparent to-neon-purple/5 pointer-events-none" />
+      {/* Decorative gold gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-gold/3 pointer-events-none" />
+
+      {/* Subtle corner accents */}
+      <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-gold/20 rounded-tl-2xl pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-gold/20 rounded-br-2xl pointer-events-none" />
 
       {/* Card content */}
       <div className="relative z-10">
         {/* Badge */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neon-green/10 border border-neon-green/30 mb-4">
-          <Sparkles className="w-3 h-3 text-neon-green" />
-          <span className="text-xs font-medium text-neon-green uppercase tracking-wider">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold/10 border border-gold/30 mb-4">
+          <Sparkles className="w-3 h-3 text-gold" />
+          <span className="text-xs font-medium text-gold uppercase tracking-wider">
             Jeu de cartes
           </span>
         </div>
 
-        {/* Title */}
-        <h2 className="text-3xl sm:text-4xl font-bold text-text-primary mb-1 text-glow-green">
+        {/* Title with Playfair Display */}
+        <h2 className="font-playfair text-3xl sm:text-4xl font-bold text-ivory mb-1">
           {title}
         </h2>
-        <p className="text-neon-green/80 font-medium mb-3">{subtitle}</p>
+        <p className="text-gold/80 font-medium mb-3">{subtitle}</p>
 
         {/* Description */}
-        <p className="text-text-secondary mb-6">{description}</p>
+        <p className="text-text-secondary mb-6 leading-relaxed">{description}</p>
 
-        {/* Buttons */}
+        {/* Buttons - Gold theme */}
         <div className="flex gap-3">
           <Button
-            color="green"
+            color="gold"
             size="lg"
             onClick={onPlay}
             className="flex-1 py-4"
@@ -62,7 +67,7 @@ function GameCard({ title, subtitle, description, onPlay, onRules }: GameCardPro
           </Button>
           <Button
             variant="outline"
-            color="purple"
+            color="gold"
             size="lg"
             onClick={onRules}
             className="py-4 px-6"
@@ -76,26 +81,28 @@ function GameCard({ title, subtitle, description, onPlay, onRules }: GameCardPro
   )
 }
 
-export function HubScreen() {
-  const { navigateTo, activeNeonColor } = useAppStore()
+interface HubScreenProps {
+  onPlayGame?: () => void
+}
 
-  const glowClass = {
-    green: 'text-glow-green',
-    purple: 'text-glow-purple',
-    red: 'text-glow-red',
-  }[activeNeonColor]
+export function HubScreen({ onPlayGame }: HubScreenProps) {
+  const { navigateTo } = useAppStore()
+  const { players } = useGameStore()
 
-  const textClass = {
-    green: 'text-neon-green',
-    purple: 'text-neon-purple',
-    red: 'text-neon-red',
-  }[activeNeonColor]
+  const handlePlay = () => {
+    if (onPlayGame) {
+      onPlayGame()
+    } else {
+      navigateTo('game')
+    }
+  }
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, x: -50 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ type: 'spring', damping: 25, stiffness: 200 }}
       className="min-h-screen bg-blackout flex flex-col"
     >
       {/* Header */}
@@ -104,10 +111,10 @@ export function HubScreen() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className={cn('text-5xl sm:text-6xl font-bold mb-2', glowClass)}
+          className="font-playfair text-5xl sm:text-6xl font-bold mb-2"
         >
-          <span className={textClass}>BLACK</span>
-          <span className="text-text-primary">OUT</span>
+          <span className="text-ivory">BLACK</span>
+          <span className="text-gold text-glow-gold">OUT</span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}
@@ -117,6 +124,24 @@ export function HubScreen() {
         >
           Collection de jeux à boire
         </motion.p>
+
+        {/* Edit players button */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mt-4"
+        >
+          <Button
+            variant="ghost"
+            color="gold"
+            onClick={() => navigateTo('welcome')}
+            className="text-sm"
+          >
+            <Users className="w-4 h-4 mr-2" />
+            {players.length} joueur{players.length !== 1 ? 's' : ''} • Modifier
+          </Button>
+        </motion.div>
       </header>
 
       {/* Main content */}
@@ -125,7 +150,7 @@ export function HubScreen() {
           title="Le Borderland"
           subtitle="52 cartes, 4 règles, 0 pitié"
           description="Tire une carte, découvre son pouvoir. Distribue des gorgées, ou bois-les. Conteste si tu oses. Survie si tu peux."
-          onPlay={() => navigateTo('game')}
+          onPlay={handlePlay}
           onRules={() => navigateTo('rules')}
         />
       </main>

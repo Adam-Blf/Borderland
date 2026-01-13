@@ -3,10 +3,10 @@ export interface BaseProps {
   children?: React.ReactNode
 }
 
-export type NeonColor = 'green' | 'purple' | 'red'
+export type NeonColor = 'green' | 'purple' | 'red' | 'gold'
 
 /** App-level navigation screens (separate from game phases) */
-export type AppScreen = 'hub' | 'game' | 'rules'
+export type AppScreen = 'welcome' | 'hub' | 'game' | 'rules'
 
 export interface ThemeColors {
   blackout: string
