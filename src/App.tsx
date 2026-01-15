@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { RotateCcw } from 'lucide-react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import { GameBoard } from '@/components/game'
-import { HubScreen, RulesScreen, WelcomeScreen } from '@/components/screens'
+import { HubScreen, PromptGameScreen, RulesScreen, WelcomeScreen, PalmTreeScreen, HorseRaceScreen, NinetyNineScreen, BlackjackScreen } from '@/components/screens'
+import { InstallPrompt } from '@/components/ui'
 import { useGameStore, useAppStore } from '@/stores'
 import { cn } from '@/utils'
 
@@ -117,6 +119,76 @@ function App() {
             </button>
           </motion.div>
         )
+
+      case 'promptGame':
+        return (
+          <motion.div
+            key="promptGame"
+            variants={screenVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ type: 'spring', damping: 25 }}
+          >
+            <PromptGameScreen />
+          </motion.div>
+        )
+
+      case 'palmTree':
+        return (
+          <motion.div
+            key="palmTree"
+            variants={screenVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ type: 'spring', damping: 25 }}
+          >
+            <PalmTreeScreen />
+          </motion.div>
+        )
+
+      case 'horseRace':
+        return (
+          <motion.div
+            key="horseRace"
+            variants={screenVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ type: 'spring', damping: 25 }}
+          >
+            <HorseRaceScreen />
+          </motion.div>
+        )
+
+      case 'ninetyNine':
+        return (
+          <motion.div
+            key="ninetyNine"
+            variants={screenVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ type: 'spring', damping: 25 }}
+          >
+            <NinetyNineScreen />
+          </motion.div>
+        )
+
+      case 'blackjack':
+        return (
+          <motion.div
+            key="blackjack"
+            variants={screenVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ type: 'spring', damping: 25 }}
+          >
+            <BlackjackScreen />
+          </motion.div>
+        )
     }
   }
 
@@ -125,6 +197,12 @@ function App() {
       <AnimatePresence mode="wait">
         {renderScreen()}
       </AnimatePresence>
+
+      {/* iOS Safari install prompt */}
+      <InstallPrompt />
+
+      {/* Vercel Speed Insights */}
+      <SpeedInsights />
     </div>
   )
 }

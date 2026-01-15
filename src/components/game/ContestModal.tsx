@@ -36,9 +36,10 @@ const modalVariants = {
 
 const pulseVariants = {
   pulse: {
-    scale: [1, 1.05, 1],
+    // Use opacity instead of scale for better GPU performance
+    opacity: [1, 0.85, 1],
     transition: {
-      duration: 1.5,
+      duration: 2,
       repeat: Infinity,
       ease: 'easeInOut' as const,
     },
@@ -91,7 +92,8 @@ export function ContestModal({
           key="contest-overlay"
           className={cn(
             'fixed inset-0 z-50',
-            'bg-blackout/80 backdrop-blur-xl',
+            // Mobile: solid bg (perf), Desktop: blur effect
+            'bg-blackout/95 sm:bg-blackout/80 sm:backdrop-blur-md',
             'flex items-center justify-center',
             'p-4'
           )}

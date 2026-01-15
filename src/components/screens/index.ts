@@ -1,3 +1,8 @@
 export { HubScreen } from './HubScreen'
+export { PromptGameScreen } from './PromptGameScreen'
 export { RulesScreen } from './RulesScreen'
 export { WelcomeScreen } from './WelcomeScreen'
+export { PalmTreeScreen } from './PalmTreeScreen'
+export { HorseRaceScreen } from './HorseRaceScreen'
+export { NinetyNineScreen } from './NinetyNineScreen'
+export { BlackjackScreen } from './BlackjackScreen'

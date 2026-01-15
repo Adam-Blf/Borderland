@@ -39,7 +39,10 @@
       "Bash(EXPO_USE_METRO_PORT=19006 npx expo start:*)",
       "Bash(npm create:*)",
       "Bash(npx tailwindcss:*)",
-      "mcp__plugin_playwright_playwright__browser_navigate"
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_fill_form",
+      "mcp__plugin_playwright_playwright__browser_wait_for",
+      "mcp__plugin_playwright_playwright__browser_run_code"
     ]
   }
 }

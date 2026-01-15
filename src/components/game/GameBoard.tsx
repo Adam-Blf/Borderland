@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Home, Crown, Sparkles, Spade, Heart, Club, Diamond } from 'lucide-react'
 import { useGameStore } from '@/stores'
@@ -75,8 +75,8 @@ interface StatusBarProps {
   totalCards: number
 }
 
-function StatusBar({ currentPlayer, cardsRemaining, totalCards }: StatusBarProps) {
-  const progress = ((totalCards - cardsRemaining) / totalCards) * 100
+const StatusBar = memo(function StatusBar({ currentPlayer, cardsRemaining, totalCards }: StatusBarProps) {
+  const progress = useMemo(() => ((totalCards - cardsRemaining) / totalCards) * 100, [totalCards, cardsRemaining])
 
   return (
     <motion.div className="space-y-5" variants={statusVariants}>
@@ -85,13 +85,20 @@ function StatusBar({ currentPlayer, cardsRemaining, totalCards }: StatusBarProps
         {/* Decorative flourish */}
         <div className="flex items-center justify-center gap-4 mb-3">
           <div className="flex-1 max-w-16 h-px bg-gradient-to-r from-transparent to-gold/40" />
-          <motion.div
-            className="w-12 h-12 rounded-full bg-gradient-to-b from-gold/20 to-gold/5 border-2 border-gold/50 flex items-center justify-center"
-            animate={{ boxShadow: ['0 0 20px rgba(212,175,55,0.2)', '0 0 30px rgba(212,175,55,0.4)', '0 0 20px rgba(212,175,55,0.2)'] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <Crown className="w-6 h-6 text-gold" />
-          </motion.div>
+          <div className="relative">
+            {/* Glow layer - animated via CSS for GPU acceleration */}
+            <motion.div
+              className="absolute inset-0 rounded-full bg-gold/30 blur-xl"
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              style={{ willChange: 'opacity' }}
+            />
+            <div
+              className="relative w-12 h-12 rounded-full bg-gradient-to-b from-gold/20 to-gold/5 border-2 border-gold/50 flex items-center justify-center"
+            >
+              <Crown className="w-6 h-6 text-gold" />
+            </div>
+          </div>
           <div className="flex-1 max-w-16 h-px bg-gradient-to-l from-transparent to-gold/40" />
         </div>
 
@@ -108,19 +115,21 @@ function StatusBar({ currentPlayer, cardsRemaining, totalCards }: StatusBarProps
 
       {/* Progress & Cards - Compact elegant bar */}
       <div className="flex items-center gap-4">
-        {/* Progress bar - Gold style */}
+        {/* Progress bar - Gold style - GPU accelerated with scaleX */}
         <div className="flex-1 relative h-2 rounded-full bg-velvet-deep overflow-hidden border border-gold/20">
           <motion.div
-            className="absolute inset-y-0 left-0 bg-gradient-to-r from-gold/80 via-gold to-gold-light rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
+            className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-gold/80 via-gold to-gold-light rounded-full origin-left"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: progress / 100 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
+            style={{ willChange: 'transform' }}
           />
-          {/* Shimmer effect */}
+          {/* Shimmer effect - reduced frequency on mobile */}
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent hidden sm:block"
             animate={{ x: ['-100%', '100%'] }}
-            transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+            transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+            style={{ willChange: 'transform' }}
           />
         </div>
 
@@ -135,7 +144,7 @@ function StatusBar({ currentPlayer, cardsRemaining, totalCards }: StatusBarProps
       </div>
     </motion.div>
   )
-}
+})
 
 interface ActionButtonsProps {
   onDrawCard: () => void
@@ -145,7 +154,7 @@ interface ActionButtonsProps {
   hasCurrentCard: boolean
 }
 
-function ActionButtons({ onDrawCard, onStartContest, onNextTurn, gamePhase, hasCurrentCard }: ActionButtonsProps) {
+const ActionButtons = memo(function ActionButtons({ onDrawCard, onStartContest, onNextTurn, gamePhase, hasCurrentCard }: ActionButtonsProps) {
   if (gamePhase === 'setup') {
     return (
       <p className="text-center text-text-muted font-montserrat">
@@ -215,7 +224,7 @@ function ActionButtons({ onDrawCard, onStartContest, onNextTurn, gamePhase, hasC
   }
 
   return null
-}
+})
 
 export function GameBoard({ className, onQuit }: GameBoardProps) {
   const {
@@ -259,11 +268,18 @@ export function GameBoard({ className, onQuit }: GameBoardProps) {
     }
   }, [cardRevealed])
 
-  const currentRule = currentCard ? SUIT_RULES[currentCard.suit] : null
+  // Memoize expensive calculations to prevent unnecessary re-renders
+  const currentRule = useMemo(
+    () => currentCard ? SUIT_RULES[currentCard.suit] : null,
+    [currentCard?.suit]
+  )
 
-  const penalty = contestState.active && contestState.baseCard
-    ? calculatePenalty(contestState.baseCard.value, contestState.level, contestState.baseCard.unit)
-    : null
+  const penalty = useMemo(
+    () => contestState.active && contestState.baseCard
+      ? calculatePenalty(contestState.baseCard.value, contestState.level, contestState.baseCard.unit)
+      : null,
+    [contestState.active, contestState.baseCard, contestState.level]
+  )
 
   const handleDrawCard = useCallback(() => {
     drawCard()
@@ -413,25 +429,25 @@ export function GameBoard({ className, onQuit }: GameBoardProps) {
               <p className="text-text-secondary font-montserrat text-sm mb-3">
                 Demande à un joueur de deviner la valeur
               </p>
-              <motion.div
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/10 border border-gold/30"
-                animate={{ scale: [1, 1.02, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
+              <div
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/10 border border-gold/30 animate-pulse-subtle"
               >
                 <motion.div
-                  animate={{ scale: [1, 1.3, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                   className="w-2 h-2 rounded-full bg-gold"
+                  style={{ willChange: 'opacity' }}
                 />
                 <p className="text-gold font-montserrat text-sm uppercase tracking-wider">
                   Toucher pour révéler
                 </p>
                 <motion.div
-                  animate={{ scale: [1, 1.3, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
                   className="w-2 h-2 rounded-full bg-gold"
+                  style={{ willChange: 'opacity' }}
                 />
-              </motion.div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -445,9 +461,9 @@ export function GameBoard({ className, onQuit }: GameBoardProps) {
               initial="hidden"
               animate="visible"
               exit="hidden"
-              className="w-full max-w-sm mx-auto mt-8"
+              className="w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto mt-6 lg:mt-8"
             >
-              <div className="rule-cartouche p-6 relative">
+              <div className="rule-cartouche p-4 sm:p-6 lg:p-8 relative">
                 {/* Suit watermark in background */}
                 <div className={cn(
                   'suit-watermark',
@@ -473,7 +489,7 @@ export function GameBoard({ className, onQuit }: GameBoardProps) {
 
                   {/* Rule title */}
                   <h3 className={cn(
-                    'font-cinzel text-2xl font-bold text-center',
+                    'font-cinzel text-xl sm:text-2xl lg:text-3xl font-bold text-center',
                     suitStyleMap[currentCard.suit].text,
                     'text-glow-gold-subtle'
                   )}>
@@ -481,10 +497,10 @@ export function GameBoard({ className, onQuit }: GameBoardProps) {
                   </h3>
 
                   {/* Gold divider */}
-                  <div className="gold-divider my-4" />
+                  <div className="gold-divider my-3 lg:my-4" />
 
                   {/* Rule description - Improved readability */}
-                  <p className="text-ivory/90 font-montserrat text-center leading-relaxed text-sm sm:text-base">
+                  <p className="text-ivory/90 font-montserrat text-center leading-relaxed text-sm sm:text-base lg:text-lg">
                     {currentRule.description}
                   </p>
 
@@ -513,11 +529,9 @@ export function GameBoard({ className, onQuit }: GameBoardProps) {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center"
           >
-            {/* Card placeholder - Stylized deck position */}
-            <motion.div
-              className="relative w-28 h-40 mx-auto mb-6"
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            {/* Card placeholder - Stylized deck position - CSS animation for perf */}
+            <div
+              className="relative w-28 h-40 mx-auto mb-6 animate-float"
             >
               {/* Stacked cards effect */}
               <div className="absolute inset-0 rounded-xl bg-velvet-deep border-2 border-gold/20 transform rotate-[-6deg] translate-x-1" />
@@ -528,7 +542,7 @@ export function GameBoard({ className, onQuit }: GameBoardProps) {
                   <span className="text-gold/60 font-cinzel text-xs uppercase tracking-wider">Piochez</span>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             <p className="text-gold/80 font-cinzel text-xl mb-2 tracking-wide">
               La Table Vous Attend

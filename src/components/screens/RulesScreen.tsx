@@ -108,7 +108,7 @@ export function RulesScreen() {
     >
       {/* Header with back button */}
       <header className="sticky top-0 z-30 bg-blackout/90 backdrop-blur-lg border-b border-gold/10">
-        <div className="max-w-lg mx-auto px-4 py-4 flex items-center">
+        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-6 py-4 flex items-center">
           <Button
             variant="ghost"
             color="gold"
@@ -117,32 +117,34 @@ export function RulesScreen() {
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="font-playfair text-xl font-bold text-ivory">
+          <h1 className="font-playfair text-xl lg:text-2xl font-bold text-ivory">
             Règles du Borderland
           </h1>
         </div>
       </header>
 
       {/* Rules content */}
-      <main className="max-w-lg mx-auto px-4 py-6 space-y-4 pb-safe">
+      <main className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-6 py-6 pb-safe">
         {/* Intro */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="text-center mb-6"
+          className="text-center mb-6 lg:mb-8"
         >
-          <p className="text-text-muted">
+          <p className="text-text-muted lg:text-lg">
             Chaque couleur de carte a sa propre règle.
             <br />
             <span className="text-gold font-medium">Les As valent un SHOT.</span>
           </p>
         </motion.div>
 
-        {/* Rule cards */}
-        {suits.map((suit, index) => (
-          <RuleCard key={suit} suit={suit} index={index} />
-        ))}
+        {/* Rule cards - Grid on larger screens */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {suits.map((suit, index) => (
+            <RuleCard key={suit} suit={suit} index={index} />
+          ))}
+        </div>
 
         {/* Contest rules */}
         <motion.div
@@ -150,7 +152,7 @@ export function RulesScreen() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
           className={cn(
-            'rounded-xl p-5 mt-6',
+            'rounded-xl p-5 lg:p-6 mt-6 md:col-span-2',
             'bg-surface-elevated border border-gold/40',
             'relative overflow-hidden'
           )}

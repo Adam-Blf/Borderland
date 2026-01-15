@@ -154,9 +154,9 @@ export function WelcomeScreen() {
       <motion.div
         variants={floatVariants}
         className={cn(
-          'w-full max-w-md relative z-10',
+          'w-full max-w-md lg:max-w-lg xl:max-w-xl relative z-10',
           'casino-card',
-          'p-8 sm:p-10'
+          'p-6 sm:p-8 lg:p-10'
         )}
       >
         {/* Inner gold frame */}

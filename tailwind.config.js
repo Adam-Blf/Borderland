@@ -85,6 +85,10 @@ export default {
         'chip-stack': 'chipStack 0.3s ease-out',
         'glow-pulse': 'glowPulse 2s ease-in-out infinite',
         'slot-spin': 'slotSpin 0.1s linear infinite',
+        // Performance optimized animations (GPU accelerated)
+        'sweep': 'sweep 3s ease-in-out infinite',
+        'sweep-slow': 'sweep 5s ease-in-out infinite',
+        'pulse-subtle': 'pulseSubtle 2s ease-in-out infinite',
       },
       keyframes: {
         shimmer: {
@@ -116,6 +120,15 @@ export default {
         slotSpin: {
           '0%': { transform: 'translateY(0)' },
           '100%': { transform: 'translateY(-100%)' },
+        },
+        // GPU accelerated sweep (uses transform instead of position)
+        sweep: {
+          '0%': { transform: 'translateX(-200%) skewX(-12deg)' },
+          '100%': { transform: 'translateX(200%) skewX(-12deg)' },
+        },
+        pulseSubtle: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.7' },
         },
       },
     },

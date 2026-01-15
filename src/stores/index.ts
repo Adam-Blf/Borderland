@@ -7,3 +7,5 @@ export {
   calculatePenalty,
   getNextPlayerIndex,
 } from './gameStore'
+export { usePalmTreeStore } from './palmTreeStore'
+export { useHorseRaceStore } from './horseRaceStore'

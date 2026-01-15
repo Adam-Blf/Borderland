@@ -1,8 +1,44 @@
 import { motion } from 'framer-motion'
-import { Play, Book, Crown, Users, Sparkles, Dices, Star } from 'lucide-react'
+import {
+  Play,
+  Book,
+  Crown,
+  Users,
+  Sparkles,
+  Dices,
+  Star,
+  Wine,
+  Flame,
+  Scale,
+  Heart,
+  Timer,
+  TreePalm,
+  Trophy,
+  Hash,
+  Spade,
+} from 'lucide-react'
 import { Button } from '@/components/ui'
 import { useAppStore, useGameStore } from '@/stores'
+import { PROMPT_GAMES } from '@/data/prompts'
+import { CARD_GAMES } from '@/data/cardGames'
+import type { CardGameType } from '@/types'
 import { cn } from '@/utils'
+
+// Icon mapping for card games
+const CARD_GAME_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  TreePalm,
+  Trophy,
+}
+
+// Icon mapping for prompt games
+const PROMPT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Wine,
+  Flame,
+  Scale,
+  Users,
+  Heart,
+  Timer,
+}
 
 interface GameCardProps {
   title: string
@@ -33,19 +69,8 @@ function GameCard({ title, subtitle, description, onPlay, onRules }: GameCardPro
       {/* Gold inner frame */}
       <div className="absolute inset-1 border-2 border-gold/30 rounded-2xl pointer-events-none z-10" />
 
-      {/* Animated light sweep effect */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/10 to-transparent -skew-x-12"
-        animate={{
-          x: ['-200%', '200%'],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          repeatDelay: 2,
-          ease: 'easeInOut',
-        }}
-      />
+      {/* Light sweep effect - CSS only for GPU perf, hidden on mobile */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/10 to-transparent -skew-x-12 animate-sweep hidden sm:block" />
 
       {/* Card inner content */}
       <div className="relative bg-gradient-to-b from-velvet-deep/90 to-black/95 rounded-2xl p-6 sm:p-8">
@@ -144,12 +169,195 @@ function GameCard({ title, subtitle, description, onPlay, onRules }: GameCardPro
   )
 }
 
+// Card for Card-based Games (Palmier, PMU)
+interface CardGameCardProps {
+  title: string
+  subtitle: string
+  description: string
+  icon: string
+  accentColor: 'gold' | 'red' | 'green'
+  onPlay: () => void
+  delay?: number
+}
+
+function CardGameCard({
+  title,
+  subtitle,
+  description,
+  icon,
+  accentColor,
+  onPlay,
+  delay = 0,
+}: CardGameCardProps) {
+  const IconComponent = CARD_GAME_ICONS[icon] || Dices
+
+  const colorStyles = {
+    gold: {
+      bg: 'from-gold/10 to-gold/5',
+      border: 'border-gold/40 hover:border-gold/60',
+      iconBg: 'bg-gold/10 border-gold/30',
+      text: 'text-gold',
+    },
+    red: {
+      bg: 'from-poker-red/10 to-poker-red/5',
+      border: 'border-poker-red/40 hover:border-poker-red/60',
+      iconBg: 'bg-poker-red/10 border-poker-red/30',
+      text: 'text-poker-red-light',
+    },
+    green: {
+      bg: 'from-casino-green/20 to-casino-green/10',
+      border: 'border-casino-green/40 hover:border-casino-green-light/60',
+      iconBg: 'bg-casino-green/20 border-casino-green-light/30',
+      text: 'text-casino-green-light',
+    },
+  }
+
+  const colors = colorStyles[accentColor]
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay, type: 'spring', damping: 20, stiffness: 100 }}
+      whileHover={{ scale: 1.03, y: -4 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={onPlay}
+      className={cn(
+        'relative overflow-hidden rounded-2xl cursor-pointer',
+        'bg-gradient-to-br',
+        colors.bg,
+        'border-2',
+        colors.border,
+        'p-5',
+        'shadow-[0_8px_30px_rgba(0,0,0,0.4)]',
+        'transition-all duration-300',
+        'hover:shadow-[0_12px_40px_rgba(0,0,0,0.5),0_0_20px_rgba(212,175,55,0.15)]'
+      )}
+    >
+      {/* Gold inner frame */}
+      <div className="absolute inset-2 border border-gold/10 rounded-xl pointer-events-none" />
+
+      {/* Light sweep - CSS animation, hidden on mobile for perf */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/5 to-transparent -skew-x-12 animate-sweep-slow hidden sm:block" />
+
+      <div className="relative flex items-center gap-4">
+        {/* Icon */}
+        <div className={cn(
+          'flex-shrink-0 w-14 h-14 rounded-xl border flex items-center justify-center',
+          colors.iconBg
+        )}>
+          <IconComponent className={cn('w-7 h-7', colors.text)} />
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <h3 className="font-cinzel text-xl font-bold text-ivory">
+            {title}
+          </h3>
+          <p className={cn('text-xs font-montserrat uppercase tracking-wider mt-0.5', colors.text)}>
+            {subtitle}
+          </p>
+          <p className="text-text-muted text-sm font-montserrat mt-1 line-clamp-2">
+            {description}
+          </p>
+        </div>
+
+        {/* Play arrow */}
+        <div className="flex-shrink-0">
+          <div className={cn(
+            'w-12 h-12 rounded-full border flex items-center justify-center transition-colors',
+            colors.iconBg,
+            'hover:bg-gold/20'
+          )}>
+            <Play className={cn('w-5 h-5 fill-current', colors.text)} />
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+// Compact card for Prompt Games
+interface PromptGameCardProps {
+  title: string
+  subtitle: string
+  description: string
+  icon: string
+  onPlay: () => void
+  delay?: number
+}
+
+function PromptGameCard({
+  title,
+  subtitle,
+  description,
+  icon,
+  onPlay,
+  delay = 0,
+}: PromptGameCardProps) {
+  const IconComponent = PROMPT_ICONS[icon] || Sparkles
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay, type: 'spring', damping: 20, stiffness: 100 }}
+      whileHover={{ scale: 1.03, y: -4 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={onPlay}
+      className={cn(
+        'relative overflow-hidden rounded-2xl cursor-pointer',
+        'bg-gradient-to-br from-velvet via-velvet-deep to-black',
+        'border-2 border-gold/40',
+        'p-4 sm:p-5',
+        'shadow-[0_8px_30px_rgba(0,0,0,0.4)]',
+        'transition-all duration-300',
+        'hover:border-gold/60',
+        'hover:shadow-[0_12px_40px_rgba(0,0,0,0.5),0_0_20px_rgba(212,175,55,0.15)]'
+      )}
+    >
+      {/* Gold inner frame */}
+      <div className="absolute inset-2 border border-gold/20 rounded-xl pointer-events-none" />
+
+      {/* Light sweep - CSS animation, hidden on mobile for perf */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/5 to-transparent -skew-x-12 animate-sweep-slow hidden sm:block" />
+
+      <div className="relative flex items-center gap-4">
+        {/* Icon */}
+        <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
+          <IconComponent className="w-6 h-6 text-gold" />
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <h3 className="font-cinzel text-lg font-bold text-ivory truncate">
+            {title}
+          </h3>
+          <p className="text-gold/70 text-xs font-montserrat uppercase tracking-wider mt-0.5">
+            {subtitle}
+          </p>
+          <p className="text-text-muted text-sm font-montserrat mt-1 line-clamp-1">
+            {description}
+          </p>
+        </div>
+
+        {/* Play arrow */}
+        <div className="flex-shrink-0">
+          <div className="w-10 h-10 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+            <Play className="w-4 h-4 text-gold fill-gold" />
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 interface HubScreenProps {
   onPlayGame?: () => void
 }
 
 export function HubScreen({ onPlayGame }: HubScreenProps) {
-  const { navigateTo } = useAppStore()
+  const { navigateTo, startPromptGame } = useAppStore()
   const { players } = useGameStore()
 
   const handlePlay = () => {
@@ -157,6 +365,14 @@ export function HubScreen({ onPlayGame }: HubScreenProps) {
       onPlayGame()
     } else {
       navigateTo('game')
+    }
+  }
+
+  const handleCardGamePlay = (gameId: CardGameType) => {
+    if (gameId === 'palmTree') {
+      navigateTo('palmTree')
+    } else if (gameId === 'horseRace') {
+      navigateTo('horseRace')
     }
   }
 
@@ -235,7 +451,7 @@ export function HubScreen({ onPlayGame }: HubScreenProps) {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 px-4 sm:px-6 pb-8 max-w-lg mx-auto w-full relative z-10">
+      <main className="flex-1 px-4 sm:px-6 lg:px-8 pb-8 max-w-lg lg:max-w-4xl xl:max-w-5xl mx-auto w-full relative z-10">
         <GameCard
           title="Le Borderland"
           subtitle="52 cartes • 4 règles • 0 pitié"
@@ -244,28 +460,68 @@ export function HubScreen({ onPlayGame }: HubScreenProps) {
           onRules={() => navigateTo('rules')}
         />
 
-        {/* Coming soon teaser */}
+        {/* Card Games Section divider */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="mt-6 text-center"
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ delay: 0.5 }}
+          className="my-8"
         >
-          <p className="text-text-muted/50 text-xs font-montserrat uppercase tracking-wider">
-            Plus de jeux bientôt...
-          </p>
-          <div className="flex justify-center gap-2 mt-3">
-            {[...Array(3)].map((_, i) => (
-              <motion.div
-                key={i}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.8 + i * 0.1, type: 'spring', damping: 15 }}
-                className="w-2 h-2 rounded-full bg-gold/20 border border-gold/30"
-              />
-            ))}
+          <div className="flex items-center gap-4">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-gold/30" />
+            <span className="text-gold/50 text-xs font-montserrat uppercase tracking-widest">
+              Jeux de Cartes
+            </span>
+            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-gold/30" />
           </div>
         </motion.div>
+
+        {/* Card Games Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          {CARD_GAMES.map((game, index) => (
+            <CardGameCard
+              key={game.id}
+              title={game.title}
+              subtitle={game.subtitle}
+              description={game.description}
+              icon={game.icon}
+              accentColor={game.accentColor}
+              onPlay={() => handleCardGamePlay(game.id)}
+              delay={0.55 + index * 0.08}
+            />
+          ))}
+        </div>
+
+        {/* Prompt Games Section divider */}
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ delay: 0.7 }}
+          className="my-8"
+        >
+          <div className="flex items-center gap-4">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-gold/30" />
+            <span className="text-gold/50 text-xs font-montserrat uppercase tracking-widest">
+              Mini-Jeux
+            </span>
+            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-gold/30" />
+          </div>
+        </motion.div>
+
+        {/* Prompt Games Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {PROMPT_GAMES.map((game, index) => (
+            <PromptGameCard
+              key={game.id}
+              title={game.title}
+              subtitle={game.subtitle}
+              description={game.description}
+              icon={game.icon}
+              onPlay={() => startPromptGame(game.id)}
+              delay={0.6 + index * 0.08}
+            />
+          ))}
+        </div>
       </main>
 
       {/* Footer */}
