@@ -13,11 +13,12 @@ export interface PlayingCardProps extends Omit<HTMLMotionProps<'div'>, 'children
   onFlipComplete?: () => void
 }
 
-const suitColorMap: Record<Suit, { text: string; glow: string; glowClass: string }> = {
-  hearts: { text: 'text-neon-red', glow: 'text-glow-red', glowClass: 'glow-red' },
-  diamonds: { text: 'text-neon-red', glow: 'text-glow-red', glowClass: 'glow-red' },
-  clubs: { text: 'text-neon-purple', glow: 'text-glow-purple', glowClass: 'glow-purple' },
-  spades: { text: 'text-neon-green', glow: 'text-glow-green', glowClass: 'glow-green' },
+// Casino Luxe color scheme - Black Card / Gold elegance
+const suitColorMap: Record<Suit, { text: string; glow: string; glowClass: string; accent: string }> = {
+  hearts: { text: 'text-poker-red-light', glow: 'text-glow-red', glowClass: 'glow-red-subtle', accent: 'border-poker-red/40' },
+  diamonds: { text: 'text-poker-red-light', glow: 'text-glow-red', glowClass: 'glow-red-subtle', accent: 'border-poker-red/40' },
+  clubs: { text: 'text-gold', glow: 'text-glow-gold-subtle', glowClass: 'glow-gold-subtle', accent: 'border-gold/40' },
+  spades: { text: 'text-gold', glow: 'text-glow-gold-subtle', glowClass: 'glow-gold-subtle', accent: 'border-gold/40' },
 }
 
 const sizeStyles = {
@@ -63,38 +64,57 @@ export const PlayingCard = forwardRef<HTMLDivElement, PlayingCardProps>(
           transition={flipTransition}
           onAnimationComplete={onFlipComplete}
         >
-          {/* Front Face */}
+          {/* Front Face - Black Card / Gold Style */}
           <div
             className={cn(
               'absolute inset-0 backface-hidden rounded-xl',
-              'bg-surface border-2 border-text-muted/30',
-              'flex flex-col justify-between p-2',
+              'bg-gradient-to-b from-velvet via-obsidian to-black',
+              'border-2 border-gold/50',
+              'flex flex-col justify-between p-3',
+              'shadow-2xl shadow-black/60',
               colors.text,
-              isHighlighted && colors.glowClass
+              isHighlighted && [colors.glowClass, 'border-gold glow-gold']
             )}
           >
+            {/* Subtle inner frame */}
+            <div className="absolute inset-2 rounded-lg border border-gold/10 pointer-events-none" />
+
+            {/* Corner gold accents */}
+            <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-gold/40 rounded-tl-sm" />
+            <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-gold/40 rounded-tr-sm" />
+            <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-gold/40 rounded-bl-sm" />
+            <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-gold/40 rounded-br-sm" />
+
             {/* Top Left Corner */}
-            <div className="flex flex-col items-start leading-none">
-              <span className={cn('font-bold', sizeStyle.corner, colors.glow)}>
+            <div className="flex flex-col items-start leading-none z-10">
+              <span className={cn('font-cinzel font-bold', sizeStyle.corner, colors.glow)}>
                 {rank}
               </span>
-              <span className={sizeStyle.corner}>{symbol}</span>
+              <span className={cn(sizeStyle.corner, 'mt-0.5')}>{symbol}</span>
             </div>
 
             {/* Center Symbol */}
-            <div className="flex-1 flex items-center justify-center">
-              <span className={cn(sizeStyle.symbol, colors.glow)}>
+            <div className="flex-1 flex items-center justify-center z-10">
+              <span className={cn(sizeStyle.symbol, colors.glow, 'drop-shadow-lg')}>
                 {symbol}
               </span>
             </div>
 
             {/* Bottom Right Corner (rotated) */}
-            <div className="flex flex-col items-end leading-none rotate-180">
-              <span className={cn('font-bold', sizeStyle.corner, colors.glow)}>
+            <div className="flex flex-col items-end leading-none rotate-180 z-10">
+              <span className={cn('font-cinzel font-bold', sizeStyle.corner, colors.glow)}>
                 {rank}
               </span>
-              <span className={sizeStyle.corner}>{symbol}</span>
+              <span className={cn(sizeStyle.corner, 'mt-0.5')}>{symbol}</span>
             </div>
+
+            {/* Subtle shine overlay */}
+            <div
+              className="absolute inset-0 rounded-xl pointer-events-none"
+              style={{
+                background: 'linear-gradient(135deg, rgba(212,175,55,0.08) 0%, transparent 40%, transparent 60%, rgba(212,175,55,0.03) 100%)',
+              }}
+            />
           </div>
 
           {/* Back Face - Obsidian & Gold Design */}
