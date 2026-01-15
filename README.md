@@ -31,12 +31,26 @@ Conteste la décision et double la mise ! Les niveaux d'escalade multiplient les
 
 **As = SHOT** | Autres cartes = gorgées (valeur de la carte)
 
+## Mini-Jeux Textuels
+
+En plus du jeu de cartes, 6 mini-jeux basés sur des prompts sont disponibles :
+
+| Jeu | Description |
+|-----|-------------|
+| **Je n'ai jamais** | Bois si tu l'as déjà fait |
+| **Action ou Vérité** | Choisis ton poison |
+| **Tu préfères** | Fais ton choix impossible |
+| **Le plus susceptible** | Désigne le coupable |
+| **C'est un 10 mais** | Le deal-breaker ultime |
+| **7 Secondes** | Réponds vite ou bois |
+
 ## Features
 
 - [x] Écran de check-in des joueurs (WelcomeScreen) - Style VIP List
 - [x] Hub de jeux avec carte style Machine à Sous Vintage
 - [x] Jeu de cartes "Le Borderland" complet
 - [x] Système de contest avec escalade
+- [x] **6 Mini-Jeux Textuels** (Never Have I Ever, Truth or Dare, etc.)
 - [x] Animations Framer Motion premium avec effets shuffle
 - [x] Persistence des joueurs (localStorage)
 - [x] **Thème Casino de Luxe** (vert feutre, or, rouge poker)
@@ -160,6 +174,22 @@ Consulte le guide complet dans [DEPLOY.md](DEPLOY.md) pour mettre en ligne le si
 **Configuration domaine OVH :** Ajoute un CNAME `blackout` → `cname.vercel-dns.com` dans ta Zone DNS.
 
 ## Changelog
+
+### 2025-01-15 - Prompts Enrichissement
+- **content**: Enrichissement massif des prompts (70 → 190 prompts)
+- **content**: Je n'ai jamais : 30 prompts (relations, soirées, secrets, réseaux sociaux)
+- **content**: Action ou Vérité : 40 prompts (20 truth + 20 dare)
+- **content**: Tu préfères : 30 prompts (super-pouvoirs, dilemmes, absurdes)
+- **content**: Le plus susceptible : 30 prompts (soirées, relations, traits)
+- **content**: C'est un 10 mais : 30 prompts (red flags, habitudes, deal-breakers)
+- **content**: 7 Secondes : 30 prompts (culture, pop culture, fun)
+
+### 2025-01-15 - Mini-Jeux Update
+- **feat**: 6 mini-jeux textuels (Prompt Games)
+- **feat**: Je n'ai jamais, Action ou Vérité, Tu préfères
+- **feat**: Le plus susceptible, C'est un 10 mais, 7 Secondes
+- **feat**: UI Casino Luxe pour les cartes de prompts
+- **feat**: Animations slide entre prompts
 
 ### 2025-01-13 - PWA & i18n Update
 - **feat**: PWA installable sur iOS et Android (mode standalone)
