@@ -4,9 +4,8 @@ import {
   Book,
   Crown,
   Users,
-  Sparkles,
   Dices,
-  Star,
+  Sparkles,
   Wine,
   Flame,
   Scale,
@@ -26,6 +25,7 @@ import { cn } from '@/utils'
 
 // Icon mapping for card games
 const CARD_GAME_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Crown,
   TreePalm,
   Trophy,
   Hash,
@@ -42,136 +42,8 @@ const PROMPT_ICONS: Record<string, React.ComponentType<{ className?: string }>> 
   Timer,
 }
 
-interface GameCardProps {
-  title: string
-  subtitle: string
-  description: string
-  onPlay: () => void
-  onRules: () => void
-}
 
-// Slot machine style game card
-function GameCard({ title, subtitle, description, onPlay, onRules }: GameCardProps) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50, rotateX: -10 }}
-      animate={{ opacity: 1, y: 0, rotateX: 0 }}
-      transition={{ delay: 0.3, type: 'spring', damping: 20, stiffness: 100 }}
-      whileHover={{ scale: 1.02, y: -8 }}
-      className={cn(
-        'relative overflow-hidden rounded-3xl',
-        'bg-gradient-to-b from-velvet via-velvet-deep to-black',
-        'border-4 border-gold/60',
-        'p-1',
-        'shadow-card-luxe',
-        'transition-shadow duration-500',
-        'hover:shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_40px_rgba(212,175,55,0.2)]'
-      )}
-    >
-      {/* Gold inner frame */}
-      <div className="absolute inset-1 border-2 border-gold/30 rounded-2xl pointer-events-none z-10" />
-
-      {/* Light sweep effect - CSS only for GPU perf, hidden on mobile */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/10 to-transparent -skew-x-12 animate-sweep hidden sm:block" />
-
-      {/* Card inner content */}
-      <div className="relative bg-gradient-to-b from-velvet-deep/90 to-black/95 rounded-2xl p-6 sm:p-8">
-        {/* Top decorative border */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
-
-        {/* Corner stars */}
-        <div className="absolute top-4 left-4">
-          <Star className="w-4 h-4 text-gold/40 fill-gold/20" />
-        </div>
-        <div className="absolute top-4 right-4">
-          <Star className="w-4 h-4 text-gold/40 fill-gold/20" />
-        </div>
-
-        {/* Game badge */}
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.5, type: 'spring', damping: 15 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-gold/20 via-gold/30 to-gold/20 border border-gold/50 mb-5"
-        >
-          <Dices className="w-4 h-4 text-gold" />
-          <span className="text-xs font-cinzel font-bold text-gold uppercase tracking-widest">
-            Jeu de Cartes
-          </span>
-        </motion.div>
-
-        {/* Title area - vintage slot machine style */}
-        <div className="relative mb-6">
-          {/* Decorative lines */}
-          <div className="flex items-center gap-3 mb-3">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-gold/40" />
-            <Sparkles className="w-5 h-5 text-gold" />
-            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-gold/40" />
-          </div>
-
-          <h2 className="font-cinzel text-4xl sm:text-5xl font-black text-ivory text-center tracking-wider">
-            {title.split(' ')[0]}
-            <span className="block text-gold text-glow-gold-subtle mt-1">
-              {title.split(' ').slice(1).join(' ') || 'BORDERLAND'}
-            </span>
-          </h2>
-
-          {/* Subtitle in vintage banner style */}
-          <div className="relative mt-4 py-2 px-6 bg-gradient-to-r from-transparent via-gold/10 to-transparent">
-            <p className="text-gold/90 font-montserrat font-medium text-center text-sm uppercase tracking-[0.15em]">
-              {subtitle}
-            </p>
-          </div>
-        </div>
-
-        {/* Description */}
-        <p className="text-text-secondary font-montserrat text-center mb-8 leading-relaxed px-2">
-          {description}
-        </p>
-
-        {/* Action buttons - Chip style */}
-        <div className="flex flex-col gap-4">
-          {/* Play button - Main CTA */}
-          <Button
-            variant="chip"
-            color="gold"
-            size="xl"
-            onClick={onPlay}
-            className="w-full animate-glow-pulse"
-          >
-            <Play className="w-6 h-6 mr-3 fill-current" />
-            <span className="text-xl tracking-wide">JOUER</span>
-          </Button>
-
-          {/* Rules button */}
-          <Button
-            variant="outline"
-            color="gold"
-            size="lg"
-            onClick={onRules}
-            className="w-full"
-          >
-            <Book className="w-5 h-5 mr-2" />
-            RÈGLES DU JEU
-          </Button>
-        </div>
-
-        {/* Bottom decorative border */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
-      </div>
-
-      {/* Bottom corner stars */}
-      <div className="absolute bottom-3 left-4">
-        <Star className="w-4 h-4 text-gold/40 fill-gold/20" />
-      </div>
-      <div className="absolute bottom-3 right-4">
-        <Star className="w-4 h-4 text-gold/40 fill-gold/20" />
-      </div>
-    </motion.div>
-  )
-}
-
-// Card for Card-based Games (Palmier, PMU)
+// Card for Card-based Games
 interface CardGameCardProps {
   title: string
   subtitle: string
@@ -179,6 +51,7 @@ interface CardGameCardProps {
   icon: string
   accentColor: 'gold' | 'red' | 'green' | 'purple'
   onPlay: () => void
+  onRules: () => void
   delay?: number
 }
 
@@ -189,6 +62,7 @@ function CardGameCard({
   icon,
   accentColor,
   onPlay,
+  onRules,
   delay = 0,
 }: CardGameCardProps) {
   const IconComponent = CARD_GAME_ICONS[icon] || Dices
@@ -199,24 +73,28 @@ function CardGameCard({
       border: 'border-gold/40 hover:border-gold/60',
       iconBg: 'bg-gold/10 border-gold/30',
       text: 'text-gold',
+      button: 'gold' as const,
     },
     red: {
       bg: 'from-poker-red/10 to-poker-red/5',
       border: 'border-poker-red/40 hover:border-poker-red/60',
       iconBg: 'bg-poker-red/10 border-poker-red/30',
       text: 'text-poker-red-light',
+      button: 'red' as const,
     },
     green: {
       bg: 'from-casino-green/20 to-casino-green/10',
       border: 'border-casino-green/40 hover:border-casino-green-light/60',
       iconBg: 'bg-casino-green/20 border-casino-green-light/30',
       text: 'text-casino-green-light',
+      button: 'green' as const,
     },
     purple: {
       bg: 'from-neon-purple/10 to-neon-purple/5',
       border: 'border-neon-purple/40 hover:border-neon-purple/60',
       iconBg: 'bg-neon-purple/10 border-neon-purple/30',
       text: 'text-neon-purple',
+      button: 'purple' as const,
     },
   }
 
@@ -227,11 +105,9 @@ function CardGameCard({
       initial={{ opacity: 0, y: 30, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay, type: 'spring', damping: 20, stiffness: 100 }}
-      whileHover={{ scale: 1.03, y: -4 }}
-      whileTap={{ scale: 0.98 }}
-      onClick={onPlay}
+      whileHover={{ scale: 1.02, y: -4 }}
       className={cn(
-        'relative overflow-hidden rounded-2xl cursor-pointer',
+        'relative overflow-hidden rounded-2xl',
         'bg-gradient-to-br',
         colors.bg,
         'border-2',
@@ -248,37 +124,53 @@ function CardGameCard({
       {/* Light sweep - CSS animation, hidden on mobile for perf */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/5 to-transparent -skew-x-12 animate-sweep-slow hidden sm:block" />
 
-      <div className="relative flex items-center gap-4">
-        {/* Icon */}
-        <div className={cn(
-          'flex-shrink-0 w-14 h-14 rounded-xl border flex items-center justify-center',
-          colors.iconBg
-        )}>
-          <IconComponent className={cn('w-7 h-7', colors.text)} />
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <h3 className="font-cinzel text-xl font-bold text-ivory">
-            {title}
-          </h3>
-          <p className={cn('text-xs font-montserrat uppercase tracking-wider mt-0.5', colors.text)}>
-            {subtitle}
-          </p>
-          <p className="text-text-muted text-sm font-montserrat mt-1 line-clamp-2">
-            {description}
-          </p>
-        </div>
-
-        {/* Play arrow */}
-        <div className="flex-shrink-0">
+      <div className="relative">
+        {/* Header with icon and title */}
+        <div className="flex items-start gap-4 mb-4">
+          {/* Icon */}
           <div className={cn(
-            'w-12 h-12 rounded-full border flex items-center justify-center transition-colors',
-            colors.iconBg,
-            'hover:bg-gold/20'
+            'flex-shrink-0 w-14 h-14 rounded-xl border flex items-center justify-center',
+            colors.iconBg
           )}>
-            <Play className={cn('w-5 h-5 fill-current', colors.text)} />
+            <IconComponent className={cn('w-7 h-7', colors.text)} />
           </div>
+
+          {/* Content */}
+          <div className="flex-1 min-w-0">
+            <h3 className="font-cinzel text-xl font-bold text-ivory">
+              {title}
+            </h3>
+            <p className={cn('text-xs font-montserrat uppercase tracking-wider mt-0.5', colors.text)}>
+              {subtitle}
+            </p>
+            <p className="text-text-muted text-sm font-montserrat mt-1 line-clamp-2">
+              {description}
+            </p>
+          </div>
+        </div>
+
+        {/* Action buttons */}
+        <div className="flex gap-2">
+          <Button
+            variant="chip"
+            color={colors.button}
+            size="sm"
+            onClick={onPlay}
+            className="flex-1 gap-2"
+          >
+            <Play className="w-4 h-4 fill-current" />
+            Jouer
+          </Button>
+          <Button
+            variant="outline"
+            color={colors.button}
+            size="sm"
+            onClick={onRules}
+            className="gap-2"
+          >
+            <Book className="w-4 h-4" />
+            Règles
+          </Button>
         </div>
       </div>
     </motion.div>
@@ -368,16 +260,12 @@ export function HubScreen({ onPlayGame }: HubScreenProps) {
   const { navigateTo, startPromptGame } = useAppStore()
   const { players } = useGameStore()
 
-  const handlePlay = () => {
-    if (onPlayGame) {
-      onPlayGame()
-    } else {
-      navigateTo('game')
-    }
-  }
-
   const handleCardGamePlay = (gameId: CardGameType) => {
-    if (gameId === 'palmTree') {
+    if (onPlayGame && gameId === 'game') {
+      onPlayGame()
+    } else if (gameId === 'game') {
+      navigateTo('game')
+    } else if (gameId === 'palmTree') {
       navigateTo('palmTree')
     } else if (gameId === 'horseRace') {
       navigateTo('horseRace')
@@ -386,6 +274,14 @@ export function HubScreen({ onPlayGame }: HubScreenProps) {
     } else if (gameId === 'blackjack') {
       navigateTo('blackjack')
     }
+  }
+
+  const handleRules = (gameId: CardGameType) => {
+    // For now, only Borderland has a rules screen
+    if (gameId === 'game') {
+      navigateTo('rules')
+    }
+    // TODO: Add rules screens for other games
   }
 
   return (
@@ -464,20 +360,12 @@ export function HubScreen({ onPlayGame }: HubScreenProps) {
 
       {/* Main content */}
       <main className="flex-1 px-4 sm:px-6 lg:px-8 pb-8 max-w-lg lg:max-w-4xl xl:max-w-5xl mx-auto w-full relative z-10">
-        <GameCard
-          title="Le Borderland"
-          subtitle="52 cartes • 4 règles • 0 pitié"
-          description="Tire une carte, découvre son pouvoir. Distribue des gorgées, ou bois-les. Conteste si tu oses. Survie si tu peux."
-          onPlay={handlePlay}
-          onRules={() => navigateTo('rules')}
-        />
-
         {/* Card Games Section divider */}
         <motion.div
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ delay: 0.5 }}
-          className="my-8"
+          transition={{ delay: 0.3 }}
+          className="mb-6"
         >
           <div className="flex items-center gap-4">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent to-gold/30" />
@@ -489,7 +377,7 @@ export function HubScreen({ onPlayGame }: HubScreenProps) {
         </motion.div>
 
         {/* Card Games Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {CARD_GAMES.map((game, index) => (
             <CardGameCard
               key={game.id}
@@ -499,7 +387,8 @@ export function HubScreen({ onPlayGame }: HubScreenProps) {
               icon={game.icon}
               accentColor={game.accentColor}
               onPlay={() => handleCardGamePlay(game.id)}
-              delay={0.55 + index * 0.08}
+              onRules={() => handleRules(game.id)}
+              delay={0.35 + index * 0.08}
             />
           ))}
         </div>

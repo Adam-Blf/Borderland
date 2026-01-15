@@ -6,6 +6,14 @@ import type { CardGameConfig, CardGameType } from '@/types'
  */
 export const CARD_GAMES: CardGameConfig[] = [
   {
+    id: 'game',
+    title: 'Le Borderland',
+    subtitle: '52 cartes • 4 règles',
+    description: 'Tire une carte, découvre son pouvoir. Distribue ou bois !',
+    icon: 'Crown',
+    accentColor: 'gold',
+  },
+  {
     id: 'palmTree',
     title: 'Le Palmier',
     subtitle: 'Vue du dessus',

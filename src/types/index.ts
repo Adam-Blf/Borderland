@@ -238,7 +238,7 @@ export interface HorseRaceState {
 // ============================================
 
 /** Card game types for hub display */
-export type CardGameType = 'borderland' | 'palmTree' | 'horseRace' | 'ninetyNine' | 'blackjack'
+export type CardGameType = 'game' | 'palmTree' | 'horseRace' | 'ninetyNine' | 'blackjack'
 
 /** Configuration for a card game displayed in Hub */
 export interface CardGameConfig {
