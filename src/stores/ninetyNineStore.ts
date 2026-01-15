@@ -198,7 +198,6 @@ export const useNinetyNineStore = create<NinetyNineStore>()((set, get) => ({
       newHand.push(drawnCard)
     } else if (discardPile.length > 1) {
       // Reshuffle discard pile (except last card)
-      const lastCard = discardPile[discardPile.length - 1]
       newDeck = shuffleArray(discardPile.slice(0, -1))
       const drawnCard = newDeck.shift()!
       newHand.push(drawnCard)

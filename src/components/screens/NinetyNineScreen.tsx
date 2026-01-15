@@ -28,7 +28,7 @@ const cardVariants = {
     opacity: 1,
     y: 0,
     rotateY: 0,
-    transition: { type: 'spring', damping: 20, stiffness: 200 },
+    transition: { type: 'spring' as const, damping: 20, stiffness: 200 },
   },
   exit: {
     opacity: 0,
@@ -87,7 +87,6 @@ interface PlayerHandProps {
 }
 
 const PlayerHand = ({ player, isCurrentPlayer, onPlayCard, canPlayCard }: PlayerHandProps) => {
-  const [selectedAceValue, setSelectedAceValue] = useState<1 | 11 | null>(null)
   const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(null)
 
   const handleCardClick = (index: number) => {
@@ -111,7 +110,6 @@ const PlayerHand = ({ player, isCurrentPlayer, onPlayCard, canPlayCard }: Player
     if (selectedCardIndex !== null) {
       onPlayCard(selectedCardIndex, value)
       setSelectedCardIndex(null)
-      setSelectedAceValue(null)
     }
   }
 
@@ -162,7 +160,6 @@ const PlayerHand = ({ player, isCurrentPlayer, onPlayCard, canPlayCard }: Player
       <div className="flex gap-2 justify-center">
         {player.hand.map((card, index) => {
           const playable = isCurrentPlayer && canPlayCard(card)
-          const isAce = card.rank === 'A'
 
           return (
             <motion.div

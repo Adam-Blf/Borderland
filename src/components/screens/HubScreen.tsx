@@ -28,6 +28,8 @@ import { cn } from '@/utils'
 const CARD_GAME_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   TreePalm,
   Trophy,
+  Hash,
+  Spade,
 }
 
 // Icon mapping for prompt games
@@ -175,7 +177,7 @@ interface CardGameCardProps {
   subtitle: string
   description: string
   icon: string
-  accentColor: 'gold' | 'red' | 'green'
+  accentColor: 'gold' | 'red' | 'green' | 'purple'
   onPlay: () => void
   delay?: number
 }
@@ -209,6 +211,12 @@ function CardGameCard({
       border: 'border-casino-green/40 hover:border-casino-green-light/60',
       iconBg: 'bg-casino-green/20 border-casino-green-light/30',
       text: 'text-casino-green-light',
+    },
+    purple: {
+      bg: 'from-neon-purple/10 to-neon-purple/5',
+      border: 'border-neon-purple/40 hover:border-neon-purple/60',
+      iconBg: 'bg-neon-purple/10 border-neon-purple/30',
+      text: 'text-neon-purple',
     },
   }
 
@@ -373,6 +381,10 @@ export function HubScreen({ onPlayGame }: HubScreenProps) {
       navigateTo('palmTree')
     } else if (gameId === 'horseRace') {
       navigateTo('horseRace')
+    } else if (gameId === 'ninetyNine') {
+      navigateTo('ninetyNine')
+    } else if (gameId === 'blackjack') {
+      navigateTo('blackjack')
     }
   }
 

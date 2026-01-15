@@ -31,9 +31,20 @@ Conteste la décision et double la mise ! Les niveaux d'escalade multiplient les
 
 **As = SHOT** | Autres cartes = gorgées (valeur de la carte)
 
+## Jeux de Cartes
+
+En plus du Borderland, 4 jeux de cartes classiques sont disponibles :
+
+| Jeu | Description |
+|-----|-------------|
+| **Le Palmier** | Rouge tu bois, Noir tu donnes. Le tronc décide du final ! |
+| **Le PMU** | Mise sur ton As favori. Les perdants boivent leur mise ! |
+| **Le 99** | Joue tes cartes sans dépasser 99. Celui qui bust boit un shot ! |
+| **Blackjack** | Bats le croupier sans dépasser 21. Perds et tu bois ta mise ! |
+
 ## Mini-Jeux Textuels
 
-En plus du jeu de cartes, 6 mini-jeux basés sur des prompts sont disponibles :
+En plus des jeux de cartes, 6 mini-jeux basés sur des prompts sont disponibles :
 
 | Jeu | Description |
 |-----|-------------|
@@ -50,6 +61,7 @@ En plus du jeu de cartes, 6 mini-jeux basés sur des prompts sont disponibles :
 - [x] Hub de jeux avec carte style Machine à Sous Vintage
 - [x] Jeu de cartes "Le Borderland" complet
 - [x] Système de contest avec escalade
+- [x] **4 Jeux de Cartes** (Palmier, PMU, 99, Blackjack)
 - [x] **6 Mini-Jeux Textuels** (Never Have I Ever, Truth or Dare, etc.)
 - [x] Animations Framer Motion premium avec effets shuffle
 - [x] Persistence des joueurs (localStorage)
@@ -174,6 +186,14 @@ Consulte le guide complet dans [DEPLOY.md](DEPLOY.md) pour mettre en ligne le si
 **Configuration domaine OVH :** Ajoute un CNAME `blackout` → `cname.vercel-dns.com` dans ta Zone DNS.
 
 ## Changelog
+
+### 2025-01-16 - Nouveaux Jeux de Cartes
+
+- **feat**: Ajout du jeu "Le 99" - Ne dépasse pas 99, règles spéciales (4=reverse, 9=pass, K=99)
+- **feat**: Ajout du jeu "Blackjack" - Bats le croupier en pariant des gorgées
+- **feat**: Stores Zustand dédiés (ninetyNineStore, blackjackStore)
+- **feat**: Nouvelle couleur Purple pour le jeu 99
+- **refactor**: Mise à jour du Hub avec navigation vers les nouveaux jeux
 
 ### 2025-01-15 - Prompts Enrichissement
 - **content**: Enrichissement massif des prompts (70 → 190 prompts)

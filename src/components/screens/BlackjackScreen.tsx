@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Spade, RotateCcw, Trophy, Skull, Plus, Hand, X2 } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowLeft, Spade, RotateCcw, Plus, Hand, ChevronsUp } from 'lucide-react'
 import { useBlackjackStore } from '@/stores/blackjackStore'
 import { useAppStore } from '@/stores/appStore'
 import { useGameStore } from '@/stores/gameStore'
@@ -27,7 +27,7 @@ const cardVariants = {
     opacity: 1,
     x: 0,
     rotateY: 0,
-    transition: { type: 'spring', damping: 20, stiffness: 200 },
+    transition: { type: 'spring' as const, damping: 20, stiffness: 200 },
   },
 }
 
@@ -36,7 +36,7 @@ const resultVariants = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { type: 'spring', damping: 15, stiffness: 300 },
+    transition: { type: 'spring' as const, damping: 15, stiffness: 300 },
   },
 }
 
@@ -162,8 +162,6 @@ const BettingPhase = ({ players, onPlaceBet, onStartGame }: BettingPhaseProps) =
     onPlaceBet(playerId, newBet)
   }
 
-  const allBetsPlaced = players.every(p => (bets[p.id] || 0) > 0)
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -246,7 +244,6 @@ export function BlackjackScreen() {
     stand,
     doubleDown,
     newRound,
-    resetGame,
     getCurrentPlayer,
     canHit,
     canDoubleDown,
@@ -264,14 +261,6 @@ export function BlackjackScreen() {
 
   const handlePlayAgain = () => {
     newRound()
-  }
-
-  const handleNewGame = () => {
-    resetGame()
-    const playerNames = gamePlayers.length > 0
-      ? gamePlayers.map(p => p.name)
-      : ['Joueur 1', 'Joueur 2']
-    initGame(playerNames)
   }
 
   const currentPlayer = getCurrentPlayer()
@@ -386,7 +375,7 @@ export function BlackjackScreen() {
                           onClick={doubleDown}
                           className="gap-2"
                         >
-                          <X2 className="w-4 h-4" />
+                          <ChevronsUp className="w-4 h-4" />
                           Doubler
                         </Button>
                       )}
