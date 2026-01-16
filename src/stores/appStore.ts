@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { AppScreen, PromptGameType, CardGameType } from '@/types'
+import type { AppScreen, PromptGameType, CardGameType, FalucheGameType } from '@/types'
 
 interface AppState {
   // Navigation
@@ -12,9 +12,13 @@ interface AppState {
   currentPromptGame: PromptGameType | null
   startPromptGame: (gameType: PromptGameType) => void
 
-  // Game Rules
+  // Game Rules (Card Games)
   currentRulesGame: CardGameType | null
   showRulesFor: (gameId: CardGameType) => void
+
+  // Classic Games Rules
+  currentClassicRulesGame: FalucheGameType | null
+  showClassicRulesFor: (gameId: FalucheGameType) => void
 
   // Theme
   activeNeonColor: 'green' | 'purple' | 'red'
@@ -31,17 +35,22 @@ export const useAppStore = create<AppState>()(
       // Navigation - default to hub
       currentScreen: 'hub',
       navigateTo: (screen) => set({ currentScreen: screen }),
-      goToHub: () => set({ currentScreen: 'hub', currentPromptGame: null, currentRulesGame: null }),
+      goToHub: () => set({ currentScreen: 'hub', currentPromptGame: null, currentRulesGame: null, currentClassicRulesGame: null }),
 
       // Prompt Games
       currentPromptGame: null,
       startPromptGame: (gameType) =>
         set({ currentPromptGame: gameType, currentScreen: 'promptGame' }),
 
-      // Game Rules
+      // Game Rules (Card Games)
       currentRulesGame: null,
       showRulesFor: (gameId) =>
-        set({ currentRulesGame: gameId, currentScreen: 'rules' }),
+        set({ currentRulesGame: gameId, currentClassicRulesGame: null, currentScreen: 'rules' }),
+
+      // Classic Games Rules
+      currentClassicRulesGame: null,
+      showClassicRulesFor: (gameId) =>
+        set({ currentClassicRulesGame: gameId, currentRulesGame: null, currentScreen: 'rules' }),
 
       // Theme
       activeNeonColor: 'green',

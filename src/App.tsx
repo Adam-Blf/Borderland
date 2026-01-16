@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { RotateCcw } from 'lucide-react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { GameBoard } from '@/components/game'
-import { HubScreen, PromptGameScreen, RulesScreen, GameRulesScreen, WelcomeScreen, PalmTreeScreen, HorseRaceScreen, NinetyNineScreen, BlackjackScreen } from '@/components/screens'
+import { HubScreen, PromptGameScreen, RulesScreen, GameRulesScreen, FalucheRulesScreen, WelcomeScreen, PalmTreeScreen, HorseRaceScreen, NinetyNineScreen, BlackjackScreen } from '@/components/screens'
 import { InstallPrompt } from '@/components/ui'
 import { useGameStore, useAppStore } from '@/stores'
 import { cn } from '@/utils'
@@ -17,7 +17,7 @@ const screenVariants = {
 
 function App() {
   const { gamePhase, initGame, resetGame, hasPlayers } = useGameStore()
-  const { currentScreen, navigateTo, goToHub, currentRulesGame } = useAppStore()
+  const { currentScreen, navigateTo, goToHub, currentRulesGame, currentClassicRulesGame } = useAppStore()
 
   // Auto-redirect to welcome if no players configured
   useEffect(() => {
@@ -83,7 +83,9 @@ function App() {
             exit="exit"
             transition={{ type: 'spring', damping: 25 }}
           >
-            {currentRulesGame ? (
+            {currentClassicRulesGame ? (
+              <FalucheRulesScreen gameId={currentClassicRulesGame} />
+            ) : currentRulesGame ? (
               <GameRulesScreen gameId={currentRulesGame} />
             ) : (
               <RulesScreen />

@@ -15,12 +15,16 @@ import {
   Trophy,
   Hash,
   Spade,
+  Swords,
+  Target,
+  Layers,
 } from 'lucide-react'
 import { Button } from '@/components/ui'
 import { useAppStore, useGameStore } from '@/stores'
 import { PROMPT_GAMES } from '@/data/prompts'
 import { CARD_GAMES } from '@/data/cardGames'
-import type { CardGameType } from '@/types'
+import { FALUCHE_GAMES } from '@/data/falucheGames'
+import type { CardGameType, FalucheGameType } from '@/types'
 import { cn } from '@/utils'
 
 // Icon mapping for card games
@@ -40,6 +44,15 @@ const PROMPT_ICONS: Record<string, React.ComponentType<{ className?: string }>> 
   Users,
   Heart,
   Timer,
+}
+
+// Icon mapping for classic games
+const CLASSIC_GAME_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Dices,
+  Swords,
+  Layers,
+  Target,
+  Trophy,
 }
 
 
@@ -252,12 +265,139 @@ function PromptGameCard({
   )
 }
 
+// Card for Faluche Games
+interface FalucheGameCardProps {
+  title: string
+  subtitle: string
+  description: string
+  category: 'DICE' | 'CARD' | 'ORAL'
+  icon: string
+  accentColor: 'amber' | 'cyan' | 'rose' | 'violet'
+  onRules: () => void
+  delay?: number
+}
+
+function FalucheGameCard({
+  title,
+  subtitle,
+  description,
+  category,
+  icon,
+  accentColor,
+  onRules,
+  delay = 0,
+}: FalucheGameCardProps) {
+  const IconComponent = CLASSIC_GAME_ICONS[icon] || Dices
+
+  const colorStyles = {
+    amber: {
+      bg: 'from-amber-500/10 to-amber-600/5',
+      border: 'border-amber-500/40 hover:border-amber-400/60',
+      iconBg: 'bg-amber-500/10 border-amber-500/30',
+      text: 'text-amber-400',
+      badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+    },
+    cyan: {
+      bg: 'from-cyan-500/10 to-cyan-600/5',
+      border: 'border-cyan-500/40 hover:border-cyan-400/60',
+      iconBg: 'bg-cyan-500/10 border-cyan-500/30',
+      text: 'text-cyan-400',
+      badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+    },
+    rose: {
+      bg: 'from-rose-500/10 to-rose-600/5',
+      border: 'border-rose-500/40 hover:border-rose-400/60',
+      iconBg: 'bg-rose-500/10 border-rose-500/30',
+      text: 'text-rose-400',
+      badge: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
+    },
+    violet: {
+      bg: 'from-violet-500/10 to-violet-600/5',
+      border: 'border-violet-500/40 hover:border-violet-400/60',
+      iconBg: 'bg-violet-500/10 border-violet-500/30',
+      text: 'text-violet-400',
+      badge: 'bg-violet-500/20 text-violet-300 border-violet-500/30',
+    },
+  }
+
+  const categoryLabels = {
+    DICE: 'Dés',
+    CARD: 'Cartes',
+    ORAL: 'Ambiance',
+  }
+
+  const colors = colorStyles[accentColor]
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay, type: 'spring', damping: 20, stiffness: 100 }}
+      whileHover={{ scale: 1.02, y: -4 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={onRules}
+      className={cn(
+        'relative overflow-hidden rounded-2xl cursor-pointer',
+        'bg-gradient-to-br',
+        colors.bg,
+        'border-2',
+        colors.border,
+        'p-4',
+        'shadow-[0_8px_30px_rgba(0,0,0,0.4)]',
+        'transition-all duration-300',
+        'hover:shadow-[0_12px_40px_rgba(0,0,0,0.5)]'
+      )}
+    >
+      <div className="relative flex items-center gap-3">
+        {/* Icon */}
+        <div className={cn(
+          'flex-shrink-0 w-12 h-12 rounded-xl border flex items-center justify-center',
+          colors.iconBg
+        )}>
+          <IconComponent className={cn('w-6 h-6', colors.text)} />
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-0.5">
+            <h3 className="font-cinzel text-lg font-bold text-ivory truncate">
+              {title}
+            </h3>
+            <span className={cn(
+              'text-[10px] px-2 py-0.5 rounded-full border font-montserrat uppercase',
+              colors.badge
+            )}>
+              {categoryLabels[category]}
+            </span>
+          </div>
+          <p className={cn('text-xs font-montserrat uppercase tracking-wider', colors.text)}>
+            {subtitle}
+          </p>
+          <p className="text-text-muted text-sm font-montserrat mt-1 line-clamp-1">
+            {description}
+          </p>
+        </div>
+
+        {/* Rules arrow */}
+        <div className="flex-shrink-0">
+          <div className={cn(
+            'w-10 h-10 rounded-full border flex items-center justify-center transition-colors',
+            colors.iconBg
+          )}>
+            <Book className={cn('w-4 h-4', colors.text)} />
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 interface HubScreenProps {
   onPlayGame?: () => void
 }
 
 export function HubScreen({ onPlayGame }: HubScreenProps) {
-  const { navigateTo, startPromptGame, showRulesFor } = useAppStore()
+  const { navigateTo, startPromptGame, showRulesFor, showClassicRulesFor } = useAppStore()
   const { players } = useGameStore()
 
   const handleCardGamePlay = (gameId: CardGameType) => {
@@ -278,6 +418,10 @@ export function HubScreen({ onPlayGame }: HubScreenProps) {
 
   const handleRules = (gameId: CardGameType) => {
     showRulesFor(gameId)
+  }
+
+  const handleFalucheRules = (gameId: FalucheGameType) => {
+    showClassicRulesFor(gameId)
   }
 
   return (
@@ -416,6 +560,40 @@ export function HubScreen({ onPlayGame }: HubScreenProps) {
               icon={game.icon}
               onPlay={() => startPromptGame(game.id)}
               delay={0.6 + index * 0.08}
+            />
+          ))}
+        </div>
+
+        {/* Classic Games Section divider */}
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ delay: 1.0 }}
+          className="my-8"
+        >
+          <div className="flex items-center gap-4">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent to-violet-500/30" />
+            <span className="text-violet-400/70 text-xs font-montserrat uppercase tracking-widest flex items-center gap-2">
+              <Dices className="w-4 h-4" />
+              Jeux Classiques
+            </span>
+            <div className="flex-1 h-px bg-gradient-to-l from-transparent to-violet-500/30" />
+          </div>
+        </motion.div>
+
+        {/* Classic Games Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {FALUCHE_GAMES.map((game, index) => (
+            <FalucheGameCard
+              key={game.id}
+              title={game.title}
+              subtitle={game.subtitle}
+              description={game.description}
+              category={game.category}
+              icon={game.icon}
+              accentColor={game.accentColor}
+              onRules={() => handleFalucheRules(game.id)}
+              delay={1.1 + index * 0.08}
             />
           ))}
         </div>
