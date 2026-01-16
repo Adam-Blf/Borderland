@@ -331,3 +331,30 @@ export interface BlackjackState {
   minBet: number
   maxBet: number
 }
+
+// ============================================
+// Faluche Games Types (from faluche.app)
+// ============================================
+
+/** Faluche game types */
+export type FalucheGameType =
+  | 'biskit'
+  | 'quatre21'
+  | 'monFoieEstMonGlaive'
+  | 'purple'
+  | 'chevre'
+  | 'flipCup'
+
+/** Faluche game categories */
+export type FalucheGameCategory = 'DICE' | 'CARD' | 'ORAL'
+
+/** Configuration for a Faluche game displayed in Hub */
+export interface FalucheGameConfig {
+  id: FalucheGameType
+  title: string
+  subtitle: string
+  description: string
+  category: FalucheGameCategory
+  icon: string
+  accentColor: 'amber' | 'cyan' | 'rose' | 'violet'
+}
