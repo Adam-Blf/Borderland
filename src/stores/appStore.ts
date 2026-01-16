@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { AppScreen, PromptGameType } from '@/types'
+import type { AppScreen, PromptGameType, CardGameType } from '@/types'
 
 interface AppState {
   // Navigation
@@ -11,6 +11,10 @@ interface AppState {
   // Prompt Games
   currentPromptGame: PromptGameType | null
   startPromptGame: (gameType: PromptGameType) => void
+
+  // Game Rules
+  currentRulesGame: CardGameType | null
+  showRulesFor: (gameId: CardGameType) => void
 
   // Theme
   activeNeonColor: 'green' | 'purple' | 'red'
@@ -27,12 +31,17 @@ export const useAppStore = create<AppState>()(
       // Navigation - default to hub
       currentScreen: 'hub',
       navigateTo: (screen) => set({ currentScreen: screen }),
-      goToHub: () => set({ currentScreen: 'hub', currentPromptGame: null }),
+      goToHub: () => set({ currentScreen: 'hub', currentPromptGame: null, currentRulesGame: null }),
 
       // Prompt Games
       currentPromptGame: null,
       startPromptGame: (gameType) =>
         set({ currentPromptGame: gameType, currentScreen: 'promptGame' }),
+
+      // Game Rules
+      currentRulesGame: null,
+      showRulesFor: (gameId) =>
+        set({ currentRulesGame: gameId, currentScreen: 'rules' }),
 
       // Theme
       activeNeonColor: 'green',

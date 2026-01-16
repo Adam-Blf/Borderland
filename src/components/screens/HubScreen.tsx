@@ -257,7 +257,7 @@ interface HubScreenProps {
 }
 
 export function HubScreen({ onPlayGame }: HubScreenProps) {
-  const { navigateTo, startPromptGame } = useAppStore()
+  const { navigateTo, startPromptGame, showRulesFor } = useAppStore()
   const { players } = useGameStore()
 
   const handleCardGamePlay = (gameId: CardGameType) => {
@@ -277,11 +277,7 @@ export function HubScreen({ onPlayGame }: HubScreenProps) {
   }
 
   const handleRules = (gameId: CardGameType) => {
-    // For now, only Borderland has a rules screen
-    if (gameId === 'game') {
-      navigateTo('rules')
-    }
-    // TODO: Add rules screens for other games
+    showRulesFor(gameId)
   }
 
   return (
