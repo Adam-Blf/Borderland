@@ -2,8 +2,11 @@
 
 ![Status](https://img.shields.io/badge/status-in%20development-yellow)
 ![Version](https://img.shields.io/badge/version-0.0.1-blue)
-![React](https://img.shields.io/badge/React-19-61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-06B6D4?logo=tailwindcss&logoColor=white)
+![Vercel](https://img.shields.io/badge/deploy-Vercel-000?logo=vercel&logoColor=white)
 
 Collection de jeux à boire avec une UI **Casino de Luxe / High Roller** et des animations premium.
 
