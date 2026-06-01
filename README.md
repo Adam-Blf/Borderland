@@ -140,20 +140,25 @@ npm run build
 
 ## Architecture
 
-```
-src/
-├── components/
-│   ├── game/           # Composants du jeu (GameBoard, PlayingCard, ContestModal)
-│   ├── screens/        # Écrans (WelcomeScreen, HubScreen, RulesScreen)
-│   └── ui/             # Composants UI réutilisables (Button)
-├── stores/
-│   ├── appStore.ts     # Navigation, thème
-│   └── gameStore.ts    # État du jeu, joueurs, cartes
-├── types/
-│   └── index.ts        # Types TypeScript
-├── utils/
-│   └── cn.ts           # Utility classnames (clsx + tailwind-merge)
-└── App.tsx             # Router principal
+```mermaid
+flowchart TB
+    App["App.tsx<br/>router principal"]
+    Screens["Écrans<br/>Welcome · Hub · Rules"]
+    Game["Composants jeu<br/>GameBoard · PlayingCard · ContestModal"]
+    UICmp["Composants UI<br/>Button · cn clsx + tailwind-merge"]
+    AppStore["appStore<br/>navigation · thème"]
+    GameStore["gameStore<br/>joueurs · cartes · contest"]
+    Data["data<br/>règles cartes · jeux"]
+    PWA["vite-plugin-pwa<br/>i18next · Vercel Speed Insights"]
+
+    App --> Screens
+    App --> Game
+    Screens --> UICmp
+    Game --> UICmp
+    Screens --> AppStore
+    Game --> GameStore
+    GameStore --> Data
+    App --> PWA
 ```
 
 ## Flow de Navigation
