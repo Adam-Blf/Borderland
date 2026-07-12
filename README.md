@@ -143,13 +143,13 @@ npm run build
 ```mermaid
 flowchart TB
     App["App.tsx<br/>router principal"]
-    Screens["Écrans<br/>Welcome · Hub · Rules"]
-    Game["Composants jeu<br/>GameBoard · PlayingCard · ContestModal"]
-    UICmp["Composants UI<br/>Button · cn clsx + tailwind-merge"]
-    AppStore["appStore<br/>navigation · thème"]
-    GameStore["gameStore<br/>joueurs · cartes · contest"]
-    Data["data<br/>règles cartes · jeux"]
-    PWA["vite-plugin-pwa<br/>i18next · Vercel Speed Insights"]
+    Screens["Écrans<br/>Welcome - Hub - Rules"]
+    Game["Composants jeu<br/>GameBoard - PlayingCard - ContestModal"]
+    UICmp["Composants UI<br/>Button - cn clsx + tailwind-merge"]
+    AppStore["appStore<br/>navigation - thème"]
+    GameStore["gameStore<br/>joueurs - cartes - contest"]
+    Data["data<br/>règles cartes - jeux"]
+    PWA["vite-plugin-pwa<br/>i18next - Vercel Speed Insights"]
 
     App --> Screens
     App --> Game
@@ -269,7 +269,7 @@ Projet privé - Adam Beloucif
 ---
 
 <p align="center">
-  <sub>Par <a href="https://adam.beloucif.com">Adam Beloucif</a> · Data Engineer & Fullstack Developer · <a href="https://github.com/Adam-Blf">GitHub</a> · <a href="https://www.linkedin.com/in/adambeloucif/">LinkedIn</a></sub>
+  <sub>Par <a href="https://adam.beloucif.com">Adam Beloucif</a> - Data Engineer & Fullstack Developer - <a href="https://github.com/Adam-Blf">GitHub</a> - <a href="https://www.linkedin.com/in/adambeloucif/">LinkedIn</a></sub>
 </p>
 
 
