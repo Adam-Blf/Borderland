@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Hash, RotateCcw, Skull, Users, Zap } from 'lucide-react'
+import { ArrowLeft, Hashtag, RotateLeft, Users, Bolt } from 'reicon-react'
+import { Skull } from '../icons/CardGlyphs'
 import { useNinetyNineStore } from '@/stores/ninetyNineStore'
 import { useAppStore } from '@/stores/appStore'
 import { useGameStore } from '@/stores/gameStore'
@@ -328,7 +329,7 @@ export function NinetyNineScreen() {
           </button>
 
           <div className="flex items-center gap-2">
-            <Hash className="w-6 h-6 text-neon-purple" />
+            <Hashtag className="w-6 h-6 text-neon-purple" />
             <h1 className="font-cinzel text-xl text-gold text-glow-gold">Le 99</h1>
           </div>
 
@@ -396,7 +397,7 @@ export function NinetyNineScreen() {
           >
             <div className="px-6 py-3 bg-neon-purple/30 border-2 border-neon-purple rounded-xl backdrop-blur-xl">
               <div className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-neon-purple animate-pulse" />
+                <Bolt className="w-5 h-5 text-neon-purple animate-pulse" />
                 <span className="text-lg font-cinzel text-neon-purple font-bold">
                   {effectText}
                 </span>
@@ -475,7 +476,7 @@ export function NinetyNineScreen() {
                   onClick={handlePlayAgain}
                   className="gap-2"
                 >
-                  <RotateCcw className="w-4 h-4" />
+                  <RotateLeft className="w-4 h-4" />
                   Rejouer
                 </Button>
               </div>

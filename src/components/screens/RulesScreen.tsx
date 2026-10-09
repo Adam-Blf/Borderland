@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from 'reicon-react'
 import { Button } from '@/components/ui'
 import { useAppStore } from '@/stores'
 import { SUIT_RULES, SUIT_SYMBOLS, type Suit } from '@/types'

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-import { ArrowLeft, Sparkles, Lightbulb, Dices } from 'lucide-react'
+import { ArrowLeft, Sparkles, Bulb } from 'reicon-react'
+import { Dices } from '../icons/CardGlyphs'
 import { useAppStore } from '@/stores/appStore'
 import { getFalucheRules } from '@/data/falucheGames'
 import type { FalucheGameType } from '@/types'
@@ -93,7 +94,7 @@ function TipsSection({ tips }: TipsSectionProps) {
       )}
     >
       <div className="flex items-center gap-2 mb-3">
-        <Lightbulb className="w-5 h-5 text-violet-400" />
+        <Bulb className="w-5 h-5 text-violet-400" />
         <h3 className="font-cinzel text-lg font-bold text-violet-300">
           Conseils de Pro
         </h3>

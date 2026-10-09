@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Users, UserPlus, X, ArrowRight, Crown, Sparkles } from 'lucide-react'
+import { Users, UserAdd, X, ArrowRight, Crown, Sparkles } from 'reicon-react'
 import { Button } from '@/components/ui'
 import { useAppStore, useGameStore } from '@/stores'
 import { cn } from '@/utils'
@@ -246,7 +246,7 @@ export function WelcomeScreen() {
                 onClick={addName}
                 className="w-full mb-6 border border-dashed border-gold/30 hover:border-gold/50"
               >
-                <UserPlus className="w-4 h-4 mr-2" />
+                <UserAdd className="w-4 h-4 mr-2" />
                 Ajouter un joueur
               </Button>
             </motion.div>

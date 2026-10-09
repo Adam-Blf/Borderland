@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Trophy, Flag, Minus, Plus, Play, RotateCcw, PartyPopper, Frown } from 'lucide-react'
+import { ArrowLeft, Trophy, Flag, Minus, Plus, Play, RotateLeft, Confetti, FaceFrown } from 'reicon-react'
 import { useHorseRaceStore } from '@/stores/horseRaceStore'
 import { useAppStore } from '@/stores/appStore'
 import { useGameStore } from '@/stores/gameStore'
@@ -502,9 +502,9 @@ function ResultPhase() {
             >
               <div className="flex items-center gap-3">
                 {result.won ? (
-                  <PartyPopper className="w-5 h-5 text-casino-green-light" />
+                  <Confetti className="w-5 h-5 text-casino-green-light" />
                 ) : (
-                  <Frown className="w-5 h-5 text-poker-red-light" />
+                  <FaceFrown className="w-5 h-5 text-poker-red-light" />
                 )}
                 <span className="text-ivory font-semibold">{result.playerName}</span>
               </div>
@@ -532,7 +532,7 @@ function ResultPhase() {
             className="flex-1 gap-2"
             onClick={handlePlayAgain}
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateLeft className="w-4 h-4" />
             Rejouer
           </Button>
         </div>

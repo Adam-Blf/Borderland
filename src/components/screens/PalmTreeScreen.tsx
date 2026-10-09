@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, TreePalm, Droplets, Gift, RotateCcw, Sparkles } from 'lucide-react'
+import { ArrowLeft, Drops, Gift, RotateLeft, Sparkles } from 'reicon-react'
+import { TreePalm } from '../icons/CardGlyphs'
 import { usePalmTreeStore } from '@/stores/palmTreeStore'
 import { useAppStore } from '@/stores/appStore'
 import { PlayingCard } from '@/components/game/PlayingCard'
@@ -169,7 +170,7 @@ const ActionFeedback = ({ type, amount, isBonus, card }: ActionFeedbackProps) =>
     >
       <div className="flex items-center gap-4">
         {isDrink ? (
-          <Droplets className="w-8 h-8 text-poker-red-light animate-bounce" />
+          <Drops className="w-8 h-8 text-poker-red-light animate-bounce" />
         ) : (
           <Gift className="w-8 h-8 text-gold animate-bounce" />
         )}
@@ -432,7 +433,7 @@ export function PalmTreeScreen() {
                   onClick={handlePlayAgain}
                   className="gap-2"
                 >
-                  <RotateCcw className="w-4 h-4" />
+                  <RotateLeft className="w-4 h-4" />
                   Rejouer
                 </Button>
               </div>

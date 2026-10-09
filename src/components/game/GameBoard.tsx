@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useMemo, memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, Crown, Sparkles, Spade, Heart, Club, Diamond } from 'lucide-react'
+import { Home, Crown, Sparkles, Heart } from 'reicon-react'
+import { Spade, Club, Diamond } from '../icons/CardGlyphs'
 import { useGameStore } from '@/stores'
 import { SUIT_RULES, SUIT_SYMBOLS } from '@/types'
 import type { Player, GamePhase, Suit } from '@/types'
@@ -367,13 +368,14 @@ export function GameBoard({ className, onQuit }: GameBoardProps) {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={onQuit}
+          aria-label="Retour au menu des jeux"
           className={cn(
             'fixed top-4 left-4 z-40',
             'w-12 h-12 rounded-full',
-            'bg-velvet border-2 border-gold/40',
+            'bg-velvet border-2 border-gold/60',
             'flex items-center justify-center',
-            'text-gold/70 hover:text-gold',
-            'hover:border-gold/60',
+            'text-gold hover:text-gold-light',
+            'hover:border-gold',
             'hover:shadow-gold-glow',
             'transition-all duration-300'
           )}

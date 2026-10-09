@@ -44,13 +44,13 @@ const colorStyles: Record<NeonColor, Record<string, string>> = {
       'active:shadow-[0_2px_0_#7f1d1d,0_4px_8px_rgba(0,0,0,0.3)] active:translate-y-[2px]'
     ),
     outline: cn(
-      'bg-transparent border-2 border-poker-red/60',
-      'text-poker-red font-semibold',
-      'hover:bg-poker-red/10 hover:border-poker-red',
+      'bg-transparent border-2 border-red-400/70',
+      'text-red-300 font-semibold',
+      'hover:bg-poker-red/10 hover:border-red-300',
       'hover:shadow-[0_0_20px_rgba(185,28,28,0.3)]'
     ),
     ghost: cn(
-      'bg-transparent text-poker-red',
+      'bg-transparent text-red-300',
       'hover:bg-poker-red/10'
     ),
     chip: cn(

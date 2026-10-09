@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { RotateCcw } from 'lucide-react'
+import { RotateLeft } from 'reicon-react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { GameBoard } from '@/components/game'
 import { HubScreen, PromptGameScreen, RulesScreen, GameRulesScreen, FalucheRulesScreen, WelcomeScreen, PalmTreeScreen, HorseRaceScreen, NinetyNineScreen, BlackjackScreen } from '@/components/screens'
@@ -113,15 +113,16 @@ function App() {
             {/* Reset Button */}
             <button
               onClick={handleReset}
+              aria-label="Recommencer la partie"
               className={cn(
                 'fixed top-4 right-4 z-40',
                 'p-3 rounded-full',
-                'bg-surface-elevated border border-text-muted/30',
-                'text-text-muted hover:text-neon-red',
+                'bg-velvet border-2 border-gold/60',
+                'text-gold hover:text-gold-light',
                 'transition-colors'
               )}
             >
-              <RotateCcw className="w-5 h-5" />
+              <RotateLeft className="w-5 h-5" />
             </button>
           </motion.div>
         )

@@ -107,7 +107,7 @@ npm run build
 | **Tailwind CSS 3.4** | Styling |
 | **Framer Motion 12** | Animations |
 | **Zustand 5** | State Management |
-| **Lucide React** | Iconographie |
+| **Reicon React** | Iconographie |
 | **Google Fonts** | Cinzel, Playfair Display, Montserrat |
 | **i18next** | Internationalisation |
 | **vite-plugin-pwa** | PWA & Service Worker |
