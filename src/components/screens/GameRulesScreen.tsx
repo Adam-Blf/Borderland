@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowLeft, Sparkles, Lightbulb } from 'lucide-react'
+import { ArrowLeft, Sparkles, Bulb } from 'reicon-react'
 import { useAppStore } from '@/stores/appStore'
 import { getGameRules } from '@/data/gameRules'
 import type { CardGameType } from '@/types'
@@ -93,7 +93,7 @@ function TipsSection({ tips }: TipsSectionProps) {
       )}
     >
       <div className="flex items-center gap-2 mb-3">
-        <Lightbulb className="w-5 h-5 text-gold" />
+        <Bulb className="w-5 h-5 text-gold" />
         <h3 className="font-cinzel text-lg font-bold text-gold">
           Conseils de Pro
         </h3>

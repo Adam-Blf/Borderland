@@ -1,24 +1,6 @@
 import { motion } from 'framer-motion'
-import {
-  Play,
-  Book,
-  Crown,
-  Users,
-  Dices,
-  Sparkles,
-  Wine,
-  Flame,
-  Scale,
-  Heart,
-  Timer,
-  TreePalm,
-  Trophy,
-  Hash,
-  Spade,
-  Swords,
-  Target,
-  Layers,
-} from 'lucide-react'
+import { Play, Book, Crown, Users, Sparkles, Wineglass, Flame, Judge, Heart, Stopwatch, Trophy, Hashtag, RecordCircle3, Layers } from 'reicon-react'
+import { Dices, TreePalm, Spade, Swords } from '../icons/CardGlyphs'
 import { Button } from '@/components/ui'
 import { useAppStore, useGameStore } from '@/stores'
 import { PROMPT_GAMES } from '@/data/prompts'
@@ -32,18 +14,18 @@ const CARD_GAME_ICONS: Record<string, React.ComponentType<{ className?: string }
   Crown,
   TreePalm,
   Trophy,
-  Hash,
+  Hashtag,
   Spade,
 }
 
 // Icon mapping for prompt games
 const PROMPT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  Wine,
+  Wine: Wineglass,
   Flame,
-  Scale,
+  Scale: Judge,
   Users,
   Heart,
-  Timer,
+  Timer: Stopwatch,
 }
 
 // Icon mapping for classic games
@@ -51,7 +33,7 @@ const CLASSIC_GAME_ICONS: Record<string, React.ComponentType<{ className?: strin
   Dices,
   Swords,
   Layers,
-  Target,
+  Target: RecordCircle3,
   Trophy,
 }
 

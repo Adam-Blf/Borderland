@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Share, X, Plus } from 'lucide-react'
+import { Export, X, Plus } from 'reicon-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/utils'
 
@@ -78,7 +78,7 @@ export function InstallPrompt() {
             <div className="flex items-start gap-4 pr-8">
               {/* Icon */}
               <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/30 flex items-center justify-center">
-                <Share className="w-6 h-6 text-gold" />
+                <Export className="w-6 h-6 text-gold" />
               </div>
 
               {/* Text */}
@@ -93,7 +93,7 @@ export function InstallPrompt() {
                 {/* Visual instruction */}
                 <div className="flex items-center gap-2 mt-3 text-xs text-gold/80">
                   <div className="flex items-center gap-1 px-2 py-1 rounded bg-gold/10 border border-gold/20">
-                    <Share className="w-3.5 h-3.5" />
+                    <Export className="w-3.5 h-3.5" />
                     <span>Partager</span>
                   </div>
                   <span className="text-gold/50">→</span>

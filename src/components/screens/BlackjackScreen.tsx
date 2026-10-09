@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Spade, RotateCcw, Plus, Hand, ChevronsUp } from 'lucide-react'
+import { ArrowLeft, RotateLeft, Plus, Hand, ArrowsUp } from 'reicon-react'
+import { Spade } from '../icons/CardGlyphs'
 import { useBlackjackStore } from '@/stores/blackjackStore'
 import { useAppStore } from '@/stores/appStore'
 import { useGameStore } from '@/stores/gameStore'
@@ -375,7 +376,7 @@ export function BlackjackScreen() {
                           onClick={doubleDown}
                           className="gap-2"
                         >
-                          <ChevronsUp className="w-4 h-4" />
+                          <ArrowsUp className="w-4 h-4" />
                           Doubler
                         </Button>
                       )}
@@ -442,7 +443,7 @@ export function BlackjackScreen() {
               onClick={handlePlayAgain}
               className="gap-2"
             >
-              <RotateCcw className="w-4 h-4" />
+              <RotateLeft className="w-4 h-4" />
               Nouvelle manche
             </Button>
           </div>

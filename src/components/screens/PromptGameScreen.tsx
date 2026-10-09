@@ -1,15 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  ArrowLeft,
-  Wine,
-  Flame,
-  Scale,
-  Users,
-  Heart,
-  Timer,
-  Sparkles,
-} from 'lucide-react'
+import { ArrowLeft, Wineglass, Flame, Judge, Users, Heart, Stopwatch, Sparkles } from 'reicon-react'
 import { Button } from '@/components/ui'
 import { useAppStore } from '@/stores'
 import { getPromptsByType, getGameConfig, shuffleArray } from '@/data/prompts'
@@ -17,12 +8,12 @@ import { cn } from '@/utils'
 
 // Icon mapping for dynamic rendering
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  Wine,
+  Wine: Wineglass,
   Flame,
-  Scale,
+  Scale: Judge,
   Users,
   Heart,
-  Timer,
+  Timer: Stopwatch,
 }
 
 // Animation variants for prompt cards
